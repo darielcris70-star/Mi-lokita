@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es-Mexico">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te amo alexa</title>
+    <link rel="stylesheet" href="estilos.css">
+     
+    <style>
+        /* Quitamos márgenes y aseguramos que el cuerpo ocupe toda la pantalla */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Evita barras de desplazamiento feas */
+            background-color: black; /* Fondo negro de respaldo por si el video tarda en cargar */
+        }
+
+        /* 🎥 Esta es la magia para fijar el video al fondo */
+        .video-fondo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100; /* Lo manda al fondo de todo, detrás de los textos */
+            object-fit: cover; /* Hace que el video se adapte a cualquier pantalla sin deformarse */
+            filter: brightness(50%); /* Oscurece un poco el video para que tus letras blancas resalten más */
+        }
+
+        /* 👑 CONTENEDOR PARA LOS TÍTULOS (Asegura el centrado arriba) */
+        .cabecera {
+            position: absolute;
+            top: 20px; /* separacion fija del borde superior de la pantalla*/
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: clamp(28px, 5vw, 60px); /* Tamaño responsivo: se adapta al ancho de la pantalla */
+            color: white;
+        }
+
+        .cabecera h4 {
+            margin: 10px 0 0 0; /* Espacio arriba del subtítulo */
+            font-size: clamp(14px, 2vw, 20px);
+            color: white;
+        }
+
+        /* 📝 Contenedor del mensaje del medio: Optimizado para pantallas anchas */
+        .mensaje-medio {
+            position: absolute;
+            top: 22vh; /* Fijado con el alto de la pantalla para dejar libre el área central del juego */
+            left: 5%;
+            right: 5%;
+            margin: 0 auto;
+            max-width: 1200px; /* Evita que el texto se estire feo al infinito */
+            padding: 0 15px;
+            box-sizing: border-box;
+            text-align: justify; /* Se ve mucho más ordenado y elegante */
+            font-size: clamp(14px, 1.8vw, 22px); /* Letra más grande y legible en monitor */
+            color: white; 
+            line-height: 1.7;
+            z-index: 10;
+        }
+
+        .texto-esquina {
+            position: fixed;   /* Lo fija respecto a la ventana del navegador */
+            left: 15px;           /* Lo pega completamente a la izquierda */
+            bottom: 15px;         /* Lo pega completamente abajo */
+            margin: 0;         /* Quita los márgenes por defecto de la etiqueta <p> */
+            font-size: 15px;
+            color: white;
+            z-index: 10;
+        }
+
+        /* 🔘 ESTILOS DEL BOTÓN INTERACTIVO: Centrado al inicio */
+        .boton-sorpresa {
+            position: absolute;
+            bottom: 20%;
+            left: calc(50% - 105px); /* Lo centra horizontalmente de forma perfecta al cargar */
+            padding: 12px 10px;
+            width: 210px;
+            height: 55px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: coral; 
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            transition: background-color 0.2s;
+        }
+
+        /* Estilo cuando el botón está bloqueado durante los 10s */
+        .boton-sorpresa:disabled {
+            background-color: #57606f; /* Gris */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Mensaje secreto final que aparece escondido */
+        .mensaje-final {
+            display: none; /* Oculto al principio */
+            position: absolute;
+            text-align: center;
+            width: 90%;
+            font-size: clamp(20px, 3vw, 32px);
+            color: #ffffff;
+            font-weight: bold;
+            z-index: 20;
+        }
+
+        /* 📌 NUEVO BOTÓN: FIJADO ABAJO A LA DERECHA */
+        .boton-esquina-derecha {
+            position: fixed;         /* Lo clava en la ventana del navegador */
+            right: 15px;             /* Separación fija del borde derecho */
+            bottom: 15px;            /* Separación fija del borde de abajo */
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: black;
+            background-color: white; /* Color blanco para contrastar con el fondo */
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 30;             /* Por encima de todo */
+        }
+    </style>
+</head>
+<body>
+
+  <div class="cabecera">
+    <h1>La lokita ke amo.</h1>
+    <h4>(Ya se que no te gusta ke te diga asi pero no me importa.)</h4>
+  </div>
+
+  <p class="mensaje-medio">
+    Bueno mira te ise esto tal vez no es la gran cosa pero se ase el intento sabes?<br>
+    Bueno antes de que le puches al boton tu que cres que es esto aparte de obviamente una pagina web lokita<br>
+    Te doi 10 segundos pa ke le pienses pero pensale no nomas le pikes a lo wey
+  </p>
+
+  <p class="texto-esquina">si es snupy por que se que te gusta</p>
+
+  <!-- 🔘 Botón interactivo (Inicia centrado y con temporizador) -->
+  <button id="btnSorpresa" class="boton-sorpresa" disabled>Pikale(10s)</button>
+
+  <!-- 🎁 Contenedor del texto sorpresa final -->
+  <div id="msgFinal" class="mensaje-final">
+      Jajajaaja ¿que ya terminaste de perseguir el boton? <br>
+      Bueno este sabes que te amo vrd? jajajaa yo se que si mi niña hermosa. <br>
+      Pero bueno picale al otro boton que esta en la esquina derecha. 😝
+      
+      <!-- 📌 Redirección exacta a pagina2index.html -->
+      <button class="boton-esquina-derecha" onclick="window.location.href='pagina2index.html'">UUUUUUU que sera esto</button>
+  </div>
+
+  <!-- El elemento de video de fondo -->
+  <video autoplay muted loop playsinline class="video-fondo">
+      <source src="Fondo 2.mp4" type="video/mp4">
+      Tu navegador no soporta videos de fondo.
+  </video>
+
+  <!-- 🧠 PROGRAMACIÓN DE LA BROMA ACTUALIZADA (20 Clics) -->
+  <script>
+      const boton = document.getElementById('btnSorpresa');
+      const mensajeFinal = document.getElementById('msgFinal');
+      let tiempo = 10;
+      let clics = 0;
+      const maxClics = 20; // 👈 Cambiado de 15 a 20 clics en total
+
+      /* 💬 LISTA DE MENSAJES EXTENDIDA A 20 FRASES */
+      const mensajesBroma = [
+          "lero lero",                   // Clic 1
+          "lenta",                       // Clic 2
+          "lokitaaaa",                   // Clic 3
+          "casi",                        // Clic 4
+          "otra vez casi",               // Clic 5
+          "AJJAJAJAAJ",                  // Clic 6
+          "¿que no se acaban?",          // Clic 7
+          "todavia",                     // Clic 8
+          "paciencia",                   // Clic 9
+          "apoco creias ke era el ultimo", // Clic 10
+          "si son muchos",               // Clic 11
+          "que si no no es divertido",   // Clic 12
+          "uno mas y ya",                // Clic 13
+          "jajaja mentira",       // Clic 14
+          "ya te cansaste? 😝",          // Clic 15 (¡Nueva!)
+          "este tampoco es",       // Clic 16 (¡Nueva!)
+          "pero ya mero",                   // Clic 17 (¡Nueva!)
+          "ora si uno mas",    // Clic 18 (¡Nueva!)
+          "ezo lazy",       // Clic 19 (¡Nueva!)
+      ];
+
+      // 1. Cuenta regresiva de 10 segundos
+      const contador = setInterval(() => {
+          tiempo--;
+          if (tiempo > 0) {
+              boton.innerText = `Pikale (${tiempo}s)`;
+          } else {
+              clearInterval(contador);
+              boton.innerText = "Pikale";
+              boton.disabled = false; // Desbloquea el botón
+          }
+      }, 1000);
+
+      // 2. Función para mover el botón y contar los clics
+      boton.addEventListener('click', () => {
+          clics++;
+
+          if (clics < maxClics) {
+              // Cambia el texto del botón para desesperarla
+              boton.innerHTML = mensajesBroma[clics - 1];
+
+              // Eliminamos el anclaje inferior para permitir el movimiento libre
+              boton.style.bottom = 'auto';
+
+              // Mantiene el rango seguro calibrado para tu monitor de 20x12 pulgadas
+              const xAleatorio = 60 + (Math.random() * (window.innerWidth - 320));
+              const yAleatorio = window.innerHeight * 0.45 + (Math.random() * (window.innerHeight * 0.35));
+
+              // Aplicamos la nueva posición
+              boton.style.left = `${xAleatorio}px`;
+              boton.style.top = `${yAleatorio}px`;
+
+              boton.blur();
+          } else {
+              // 3. Cuando llega a los 20 clics, el botón desaparece y sale la sorpresa
+              boton.style.display = 'none';
+              mensajeFinal.style.display = 'block';
+          }
+      });
+  </script>
+
+</body>
+</html>

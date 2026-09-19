@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es-Mexico">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para la lokita más hermosa</title>
+    <link rel="stylesheet" href="estilos.css">
+     
+    
+    <style>
+        /* 🖤 TEXTURA DE ASIENTO ACOLCHADO EN EL FONDO NEGRO */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            min-height: 100vh; 
+            background-color: #0d0d0d; 
+            background-image: 
+                linear-gradient(315deg, rgba(30, 30, 30, 0.4) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(30, 30, 30, 0.4) 25%, transparent 25%), 
+                linear-gradient(135deg, rgba(20, 20, 20, 0.5) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(20, 20, 20, 0.5) 25%, transparent 25%),
+                radial-gradient(circle at 50% 50%, #000000 3px, rgba(40, 40, 40, 0.6) 5px, transparent 8px);
+            background-size: 60px 60px; 
+            background-position: 0 0, 0 0, 30px 30px, 30px 30px, 0 0;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            overflow-y: auto;  
+            overflow-x: hidden; 
+            padding: 100px 20px; 
+            box-sizing: border-box;
+        }
+
+        /* 👑 CONTENEDOR PRINCIPAL DEL MARCO */
+        .marco-boceto {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .linea-marco {
+            position: absolute;
+            border: 4px solid #d4af37; 
+            box-sizing: border-box;
+        }
+
+        .bloque-sup-izq { top: 0; left: 0; width: calc(50% - 30px); height: calc(50% - 30px); border-right: none; border-bottom: none; border-top-left-radius: 16px; }
+        .bloque-sup-der { top: 0; right: 0; width: calc(50% - 30px); height: calc(50% - 30px); border-left: none; border-bottom: none; border-top-right-radius: 16px; }
+        .bloque-inf-izq { bottom: 0; left: 0; width: calc(50% - 30px); height: calc(50% - 30px); border-right: none; border-top: none; border-bottom-left-radius: 16px; }
+        .bloque-inf-der { bottom: 0; right: 0; width: calc(50% - 30px); height: calc(50% - 30px); border-left: none; border-top: none; border-bottom-right-radius: 16px; }
+
+        .caracol-contenedor { position: absolute; width: 50px; height: 50px; z-index: 55; }
+        .caracol-contenedor svg { width: 100%; height: 100%; fill: none; stroke: #d4af37; stroke-width: 4.5; stroke-linecap: round; }
+
+        .c-top-izq { top: -23px; left: calc(50% - 48px); transform: scaleX(-1); }
+        .c-top-der { top: -23px; right: calc(50% - 48px); }
+        .c-bottom-izq { bottom: -23px; left: calc(50% - 48px); transform: scale(-1); }
+        .c-bottom-der { bottom: -23px; right: calc(50% - 48px); transform: scaleY(-1); }
+        .c-left-top { left: -23px; top: calc(50% - 48px); transform: rotate(90deg) scaleX(-1); }
+        .c-left-bottom { left: -23px; bottom: calc(50% - 48px); transform: rotate(90deg); }
+        .c-right-top { right: -23px; top: calc(50% - 48px); transform: rotate(-90deg); }
+        .c-right-bottom { right: -23px; bottom: calc(50% - 48px); transform: rotate(-90deg) scaleX(-1); }
+
+        /* ✨ CONTENEDOR DE LA CARTA CENTRAL (¡Ahora más grande e imponente!) */
+        .carta-contenedor {
+            width: 95%; /* 👈 Sube del 90% al 95% para aprovechar los lados */
+            max-width: 980px;  /* 👈 Ampliado de 780px a 980px para que sea mucho más ancha */
+            min-height: 50vh;  /* 👈 Sube un poco la altura mínima */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+            padding: 60px 50px; /* 👈 Más espacio interno para que el texto respire */
+            background: rgba(10, 10, 10, 0.96); 
+            border: 2px solid rgba(212, 175, 55, 0.35); 
+            border-radius: 28px; /* 👈 Bordes un poquito más curvos y elegantes */
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.18); /* 👈 Sombra con más presencia */
+            z-index: 10;
+            box-sizing: border-box;
+            margin-bottom: 50px; 
+        }
+
+        /* 👑 TÍTULO ("Para mi niña hermosa"): Más grande y llamativo */
+        .carta-contenedor h1 { 
+            margin: 0 0 15px 0; 
+            font-size: clamp(28px, 4.5vw, 46px); /* 👈 Máximo sube de 36px a 46px */
+            color: #d4af37; 
+            font-family: 'Georgia', serif; 
+            letter-spacing: 1.5px; 
+        }
+
+        /* 📝 TEXTO DE LA DEDICATORIA: Letra más grande, espaciosa y fácil de leer */
+        .carta-contenedor p { 
+            font-size: clamp(17px, 2.2vw, 22px); /* 👈 Sube el tamaño base y el máximo a 22px */
+            line-height: 1.8; /* 👈 Un poquito más de separación entre renglones */
+            color: #f1f2f6; 
+            margin: 0; 
+            display: block; 
+            text-align: justify; /* 👈 Hace que el bloque de texto se vea perfectamente alineado */
+            text-justify: inter-word;
+        }
+
+        /* ⚜️ DIVISOR ("Una pequeña dedicatoria"): Más separado y estilizado */
+        .divisor-boceto { 
+            color: #d4af37; 
+            font-size: clamp(18px, 2vw, 26px); /* 👈 Sube el tamaño de la letra del divisor */
+            margin: 20px 0 25px 0; /* 👈 Más separación arriba y abajo */
+            letter-spacing: 6px; 
+        }
+
+        /* 📦 ENVOLTORIO PARA ALINEAR EN FILA HORIZONTAL (Optimizado de esquina a esquina) */
+        .seccion-interactiva-horizontal {
+            display: flex;
+            flex-direction: row; 
+            align-items: center; /* Centra los elementos verticalmente */
+            justify-content: space-between; /* Empuja el botón a un extremo y la foto al otro */
+            width: 100%; 
+            max-width: 1390px; 
+            margin: 60px auto; 
+            gap: 40px; 
+            box-sizing: border-box;
+            z-index: 10;
+            clear: both; /* Evita amontonamientos con bloques de arriba */
+        }
+
+        .zona-boton-izquierda { 
+            flex-shrink: 0; 
+            text-align: left;
+            box-sizing: border-box; 
+        }
+        
+        .btn-revelar-izq { 
+            padding: 16px 36px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            color: white; 
+            background-color: coral; 
+            border: none; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(255, 127, 80, 0.3); 
+            transition: transform 0.2s, background-color 0.2s; 
+        }
+        .btn-revelar-izq:hover { transform: translateY(-2px); background-color: #ff7f50; }
+        
+        .bloque-desplegable-secreto { 
+            flex-grow: 1; 
+            text-align: left; 
+            box-sizing: border-box; 
+            min-width: 200px;
+        }
+
+        /* TEXTO CON EFECTO DE DESVANECIMIENTO INVERSO */
+        .texto-secreto { 
+            max-height: 0; 
+            overflow: hidden; 
+            opacity: 0; 
+            filter: blur(12px); 
+            font-size: clamp(16px, 1.5vw, 20px); 
+            line-height: 1.8; 
+            color: #ffffff; 
+            transition: opacity 1.5s ease, filter 1.2s ease, max-height 1s ease, margin-top 0.5s; 
+            width: 100%; /* Se estira en todo el espacio central libre */
+            text-align: justify;
+        }
+        
+        .texto-secreto.revelado { 
+            max-height: 600px; 
+            opacity: 1; 
+            filter: blur(0px); 
+            margin-top: 0; 
+        }
+        
+        /* FOTO RESPONSIVA PROTEGIDA DE LADO (Con límite ampliado para monitores grandes) */
+        .foto-secreta { 
+            display: none; 
+            width: 100%; 
+            max-width: 380px; /* Crece más en pantallas grandes para verse nítida */
+            height: auto; 
+            border: 3px solid #d4af37; 
+            border-radius: 16px; 
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.25); 
+            object-fit: cover; 
+            flex-shrink: 0;
+        }
+        
+        .foto-secreta.mostrar { 
+            display: inline-block; 
+            animation: entradaSuave 1.5s ease forwards;
+        }
+        @keyframes entradaSuave { from { opacity: 0; transform: translateX(25px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* 📱 RESPONSIVO: En celulares la fila se vuelve columna automáticamente */
+        @media (max-width: 768px) {
+            .seccion-interactiva-horizontal { flex-direction: column; align-items: center; margin: 40px auto; }
+            .zona-boton-izquierda { width: 100%; text-align: center; }
+            .bloque-desplegable-secreto { text-align: center; }
+            .foto-secreta { max-width: 100%; }
+            .texto-secreto.revelado { margin-top: 25px; }
+        }
+        
+        /* 🔄 SEGUNDA Y CUARTA SECCIÓN: Invierte el orden físico de forma limpia */
+        .seccion-interactiva-horizontal.invertida {
+            flex-direction: row-reverse;
+        }
+
+        .zona-boton-derecha {
+            flex-shrink: 0;
+            text-align: right;
+            box-sizing: border-box;
+        }
+
+        /* 📱 Ajuste responsivo para secciones invertidas en celulares */
+        @media (max-width: 768px) {
+            .seccion-interactiva-horizontal.invertida { flex-direction: column-reverse; align-items: center; }
+            .zona-boton-derecha { width: 100%; text-align: center; }
+        }
+
+        
+        /* 🛠️ SOLUCIÓN REAL: Limpia el espacio horizontal y separa los bloques */
+.seccion-interactiva-horizontal {
+    clear: both; /* Fuerza a que cada botón empiece en una línea nueva sin importar la foto de arriba */
+    margin-top: 60px !important; /* Asegura una separación generosa de la foto anterior */
+    margin-bottom: 60px !important;
+}
+
+/* Evita que el contenedor colapse si el texto se hace muy largo */
+.bloque-desplegable-secreto {
+    min-width: 200px;
+}
+
+        /* 🔒 EFECTO MÁGICO: Oculta los botones pero guarda su espacio exacto */
+        .btn-oculto-secuencial {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .btn-oculto-secuencial.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 👑 El marco de caracoles dorados -->
+    <div class="marco-boceto">
+        <div class="linea-marco bloque-sup-izq"></div>
+        <div class="linea-marco bloque-sup-der"></div>
+        <div class="linea-marco bloque-inf-izq"></div>
+        <div class="linea-marco bloque-inf-der"></div>
+        <div class="caracol-contenedor c-top-izq"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-top-der"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-bottom-izq"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-bottom-der"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-left-top"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-left-bottom"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-right-top"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+        <div class="caracol-contenedor c-right-bottom"><svg viewBox="0 0 50 50"><path d="M 45,5 A 40,40 0 0,0 5,25 A 25,25 0 0,0 35,40 A 15,15 0 0,0 20,20 A 8,8 0 0,0 28,28" /></svg></div>
+    </div>
+
+    <!-- ✨ Tu mensaje o carta para Alexa intacta por dentro -->
+    <div class="carta-contenedor">
+        <h1>Para mi niña hermosa </h1>
+        <div class="divisor-boceto"> Unas pequeña dedicatoria. </div>
+        <p>
+            Bueno sabes que te amo mucho alexa y pues bueno como yo soy alguien que tiene
+            mucho pero mucho tiempo pues me puse a hacerte esta pequeñes al igual que tambien
+            es una especie de disculpa por decir que me maltratas por que veo que te lo tomaste
+            muy personal y pues por eso no te hable estos dias lokita no es por que me alla sentido o algo
+            okei? y en si es para pues no se decirte que te amo mucho mucho mucho lokita de verdad que mucho
+            pero pues mucho bla bla pues te dejo que veas lo que te ise te amo.
+        </p>
+    </div>
+    <!-- 📦 SECCIÓN INTERACTIVA EN FILA 1 (Botón a la izquierda, texto en medio, foto a la derecha) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <!-- Botón 1 siempre visible -->
+            <button id="btn1" class="btn-revelar-izq" onclick="revelarSecreto()"> Que sera</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto" class="texto-secreto">
+            Aqui veo a mi niña hermosa pero uy se ve bien guapa mira noma esa carita Jajajaaja
+            mirando asi asi de calamardo wuapo que guapa se ve mi niña hermosa y si dioz te vez 
+            nose me dan ganas de abrazarte esk si te te te vez bien wuapa jajajaj aunque le da
+            pena que le diga eso no se por que pero olle si cierto no la avia visto vien esta foto
+            te vez jajjajaj ay nose pero gusta.
+            </div>
+        </div>
+        <img id="fotoOculta" class="foto-secreta" src="Alexaguapa.jpeg" alt="Sorpresa para Alexa">
+    </div>
+
+    <!-- 📦 SEGUNDA SECCIÓN INTERACTIVA 2 (Despliega hacia la izquierda, botón a la derecha) -->
+    <div class="seccion-interactiva-horizontal invertida">
+        <div class="zona-boton-derecha">
+            <!-- Botón 2 inicia oculto con la clase secuencial -->
+            <button id="btn2" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarSegundoSecreto()"> ajajaj adivina</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto2" class="texto-secreto">
+            Mmmmmmmmm creo y si no mal recuerdo esta fue la primera foto "sola" que me mando esta feita
+            jajajaja (ya sabes que no es cierto) y me acuerdo que esa vez uy asta celebre dioz mio
+            por que para que me aiga mandado una foto estaba cabron (sigue estando asta la fecha).
+            </div>
+        </div>
+        <img id="fotoOculta2" class="foto-secreta" src="Alexabonita.jpeg" alt="Segunda sorpresa para Alexa">
+    </div>
+
+    <!-- 📦 TERCERA SECCIÓN INTERACTIVA 3 (Vuelve a desplegar hacia la derecha, botón a la izquierda) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <!-- Botón 3 inicia oculto con la clase secuencial -->
+            <button id="btn3" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarTercerSecreto()"> ke guapa</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto3" class="texto-secreto">
+            Esta foto creo fue la segunda mmmmmmmmmmmmmm kien sabe pero de esta foto lo que mas me gusta
+            es que te vez tan agusto calmada jajajajaaja y tienes esa sonrisa que me gusta de ti sabes??
+            al igual que esos ojitos y sabes sabes asi ya en confianza me gusta ese lunar que tienes en la boca
+            por que nose me gusta te vez mmmmmmmmm muy asi de agarrarte a besos sabes jajajaja pero bueno
+            como toda foto tuya me encantan por que osea n0 mames que guapa ajjajaja.
+            </div>
+        </div>
+        <img id="fotoOculta3" class="foto-secreta" src="Alexasonriente.jpeg" alt="Tercera sorpresa para Alexa">
+    </div>
+
+    <!-- 📦 CUARTA SECCIÓN INTERACTIVA 4 (Despliega hacia la izquierda, botón a la derecha) -->
+    <div class="seccion-interactiva-horizontal invertida">
+        <div class="zona-boton-derecha">
+            <!-- Botón 4 inicia oculto con la clase secuencial -->
+            <button id="btn4" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarCuartoSecreto()"> jajaja tal vez me pegues </button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto4" class="texto-secreto">
+                JJAJAJA probablemente no te guste esta foto o que la aiga puesto aki jajajaja ya ke ps bueno si te ves
+                un pokito asi pokito demacrada ajajajaj asi de espanto jajajaja probablemente cuando leas esto estaras asiendo
+                jetas o asiendo ash ash ash ajajaj pero igual te vez bonita y me gusta igual esta foto aunque tal vez a ti no
+                te valla a justar que es lo mas probable ahaajajjaja.
+            </div>
+        </div>
+        <img id="fotoOculta4" class="foto-secreta" src="Alexajodida.jpeg" alt="Cuarta sorpresa para Alexa">
+    </div>
+
+    <!-- 📦 QUINTA SECCIÓN INTERACTIVA 5 (Idéntica a la primera y tercera, botón a la izquierda) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <!-- Botón 5 inicia oculto con la clase secuencial -->
+            <button id="btn5" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarQuintoSecreto()"> mi favorita o era </button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto5" class="texto-secreto">
+                Y bueno esta es la ultima foto que me mandaste y de la cual es mi favorita por que no mames
+                estas bien pinche ermosa en esta foto dioz y luego me dices esk no por que estoy toda fodonga
+                jajajajaja pero no mames es en la que te ves mas bonita alexa es mi favorita tal vez te preguntes
+                el por que o de donde me saque esa marihuanada pero nose te vez demaciado hermosa.
+            </div>
+        </div>
+        <img id="fotoOculta5" class="foto-secreta" src="Alexahermosa.jpeg" alt="Quinta sorpresa para Alexa">
+    </div>
+
+        <!-- 📦 SEXTA SECCIÓN INTERACTIVA 6 (Despliega hacia la izquierda, botón a la derecha) -->
+    <div class="seccion-interactiva-horizontal invertida">
+        <div class="zona-boton-derecha">
+            <!-- Botón 6 inicia oculto con la clase secuencial -->
+            <button id="btn6" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarSextoSecreto()"> uy que wuapa</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto6" class="texto-secreto">
+                Jajajaaja nose si veas esto orita ya o nose si me espere para el domingo pero aver que te puedo decir de esta
+                foto pues mmmmmmmmm que y ese bombon de ahi jajaja que bonita aunque pobresita se andaba derritiendo en la 
+                escuela mi niña hermosa jajaja pero si se andaa derritiendo este bombon que balla bombon mira namas que belleza
+                te cargas y no me cansare de repetirtelo que guapa esta mi niña.
+            </div>
+        </div>
+        <!-- 🖼️ SEXTA FOTO -->
+        <img id="fotoOculta6" class="foto-secreta" src="Alexajajaajaja.jpeg" alt="Sexta sorpresa para Alexa">
+    </div>
+<!-- 📦 SÉPTIMA SECCIÓN INTERACTIVA 7 (Botón a la izquierda) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <button id="btn7" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarSeptimoSecreto()"> jajajaja casi igual </button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto7" class="texto-secreto">
+            Y a aqui que pongo ps nada solo festejar por que dioz por fin ay wey ke sentimiento primera ves que me mandas 2 fotos en un dias osea
+            sabes lo que me a tocado mario icono super prime no loco jajaja bueno ya pero si osea aim happy 2 fotos graciax my love sbaes que te amo 
+            mucho mucho mucho mucho mucho vrd? al igual que en el texto anterior de que bolsa se escapo este bombon por que mira nomas ke wupa esta esta
+            niña y mas ssaniendo que me mando 2 fotos el mismo dia VAMOOOOOOOOOOOOS SIUUUUUUUUUUUU dioz esk ke felicidad sabes? por que quien no es feliz
+            cuando la persina mas guapa que conoces te manda dos fotos de ella osea DIOZ MIO QUE BENDICION.
+            </div>
+        </div>
+        <img id="fotoOculta7" class="foto-secreta" src="Alexaesigual.jpeg" alt="Séptima sorpresa para Alexa">
+    </div>
+
+    <!-- 📦 OCTAVA SECCIÓN INTERACTIVA 8 (Botón a la derecha) -->
+    <div class="seccion-interactiva-horizontal invertida">
+        <div class="zona-boton-derecha">
+            <button id="btn8" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarOctavoSecreto()"> ora si mi favorita </button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto8" class="texto-secreto">
+        Bueno jajajaja pues consegui que me mandaras esta foto y pues ke feliz ke soi sabes estoy escribiendo esto el dia ke me mandste la foto
+                entonces solo puedo decir lo que ya te avia dicho ese mismo dia simplemente te vez demaciado hermosa y sabes trato de aser que los mensajes
+                no sean repetitivos pero jajajaaj ya te e dicho todo lo que te puedp decir te vez muy hermosa alexa como la estrella de belen
+                (supongo que sabes cual si no es la estrella mas grande que ay en el cielo) en una noche despejada y te amo chingo en especial asi demiquillada
+                por que no mames 100000/10 y me encantas asi aunque se que ati no te gusta y no me kieres mandar fotos por pena pero me hacen feliz tus fotos.Y pues
+                te queria decir que bueno sonara ya muy repetitivo esto pero te quiero decir que te amo mucho y pues gracias por estar conmigo pues me ases muy feliz
+                y me encantas demaciado en especial con esta ultima foto jajaaj solo me gustas mas sabes?....
+            </div>
+        </div>
+        <img id="fotoOculta8" class="foto-secreta" src="Alexaminiña.jpeg" alt="Octava sorpresa para Alexa">
+    </div>
+
+    </div>
+
+     <!-- 🧠 Lógica secuencial: Revela contenido y desbloquea el siguiente botón -->
+    <script>
+        function revelarSecreto() {
+            const txt = document.getElementById('textoOculto');
+            const img = document.getElementById('fotoOculta');
+            const nextBtn = document.getElementById('btn2');
+            
+            txt.classList.toggle('revelado');
+            img.classList.toggle('mostrar');
+            
+            if(txt.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+        function revelarSegundoSecreto() {
+            const txt2 = document.getElementById('textoOculto2');
+            const img2 = document.getElementById('fotoOculta2');
+            const nextBtn = document.getElementById('btn3');
+            
+            txt2.classList.toggle('revelado');
+            img2.classList.toggle('mostrar');
+            
+            if(txt2.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+        function revelarTercerSecreto() {
+            const txt3 = document.getElementById('textoOculto3');
+            const img3 = document.getElementById('fotoOculta3');
+            const nextBtn = document.getElementById('btn4');
+            
+            txt3.classList.toggle('revelado');
+            img3.classList.toggle('mostrar');
+            
+            if(txt3.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+        function revelarCuartoSecreto() {
+            const txt4 = document.getElementById('textoOculto4');
+            const img4 = document.getElementById('fotoOculta4');
+            const nextBtn = document.getElementById('btn5');
+            
+            txt4.classList.toggle('revelado');
+            img4.classList.toggle('mostrar');
+            
+            if(txt4.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+         function revelarQuintoSecreto() {
+            const txt5 = document.getElementById('textoOculto5');
+            const img5 = document.getElementById('fotoOculta5');
+            const nextBtn = document.getElementById('btn6');
+            
+            txt5.classList.toggle('revelado');
+            img5.classList.toggle('mostrar');
+            
+            if(txt5.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+        function revelarSextoSecreto() {
+            const txt6 = document.getElementById('textoOculto6');
+            const img6 = document.getElementById('fotoOculta6');
+            const nextBtn = document.getElementById('btn7'); // 👈 Corregido: Se añadió esta línea para activar el botón 7
+            
+            txt6.classList.toggle('revelado');
+            img6.classList.toggle('mostrar');
+
+             if(txt6.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+         function revelarSeptimoSecreto() {
+            const txt7 = document.getElementById('textoOculto7');
+            const img7 = document.getElementById('fotoOculta7');
+            const nextBtn = document.getElementById('btn8'); 
+            
+            txt7.classList.toggle('revelado');
+            img7.classList.toggle('mostrar');
+
+            if(txt7.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+
+         function revelarOctavoSecreto() {
+            const txt8 = document.getElementById('textoOculto8');
+            const img8 = document.getElementById('fotoOculta8');
+            
+            txt8.classList.toggle('revelado');
+            img8.classList.toggle('mostrar');
+        }
+
+
+    </script>
+
+</body>
+</html>
