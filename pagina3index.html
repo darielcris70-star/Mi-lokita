@@ -636,7 +636,7 @@
         let searchTargetSnoopy = null;
 
         const casitaImg = new Image(); casitaImg.src = "casita.png";
-        const snoopyParadoImg = new Image(); snoopyParadoImg.src = "snoopyparado.png";
+        const snoopyparadoImg = new Image(); snoopyparadoImg.src = "snoopyparado.png";
 
         // ===================================================
         // ⚙️ VARIABLES DE CONTROL DE TAMAÑO (MODIFÍCALAS AQUÍ)
@@ -687,7 +687,7 @@
                         ctxSearch.beginPath(); ctxSearch.moveTo(-15, 25); ctxSearch.lineTo(15, 25); ctxSearch.lineTo(0, -10); ctxSearch.closePath(); ctxSearch.fill(); ctxSearch.stroke();
                         ctxSearch.fillStyle = "#fbc02d"; ctxSearch.beginPath(); ctxSearch.arc(0, -15, 14, 0, Math.PI * 2); ctxSearch.fill(); ctxSearch.stroke();
                     } else if (this.type === 2) { 
-                        ctxSearch.drawImage(snoopyParadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
+                        ctxSearch.drawImage(snoopyparadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else {
                         ctxSearch.scale(this.w / 85, this.h / 95); 
                         ctxSearch.fillStyle = "#e53935"; ctxSearch.fillRect(-12, 4, 24, 18); ctxSearch.strokeRect(-12, 4, 24, 18);
