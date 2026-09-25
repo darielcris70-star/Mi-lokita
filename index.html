@@ -126,21 +126,88 @@
             z-index: 20;
         }
 
-        /* 📌 NUEVO BOTÓN: FIJADO ABAJO A LA DERECHA */
+        /* 📌 CONTENEDOR NUEVO: Agrupa los botones para que se apilen bien */
+        .contenedor-botones-esquina {
+            position: fixed;
+            right: 15px;
+            bottom: 15px;
+            display: flex;
+            flex-direction: column; /* Uno arriba del otro en PC */
+            gap: 10px;
+            z-index: 30;
+        }
+
+        /* 📌 NUEVO BOTÓN SUPERIOR (CORAL) */
+        .boton-esquina-arriba {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background-color: coral;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* 📌 BOTÓN INFERIOR ORIGINAL (BLANCO) */
         .boton-esquina-derecha {
-            position: fixed;         /* Lo clava en la ventana del navegador */
-            right: 15px;             /* Separación fija del borde derecho */
-            bottom: 15px;            /* Separación fija del borde de abajo */
             padding: 10px 20px;
             font-size: 14px;
             font-weight: bold;
             color: black;
-            background-color: white; /* Color blanco para contrastar con el fondo */
+            background-color: white;
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            z-index: 30;             /* Por encima de todo */
         }
+
+        /* 📱 AJUSTES EXCLUSIVOS PARA PANTALLAS DE CELULAR */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto; 
+                justify-content: flex-start;
+                padding-top: 140px;
+            }
+
+            .mensaje-medio {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto 120px auto;
+                padding: 0 20px;
+                text-align: left;
+            }
+
+            .mensaje-final {
+                position: relative;
+                width: 100%;
+                margin-top: 30px;
+                padding-bottom: 40px;
+            }
+
+            .contenedor-botones-esquina {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(5px);
+                padding: 15px;
+                flex-direction: row; /* Uno al lado del otro en celular */
+                justify-content: space-around;
+                box-sizing: border-box;
+            }
+
+            .boton-esquina-arriba, .boton-esquina-derecha {
+                flex: 1;
+                text-align: center;
+                font-size: 13px;
+                padding: 12px 5px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -165,10 +232,18 @@
   <div id="msgFinal" class="mensaje-final">
       Jajajaaja ¿que ya terminaste de perseguir el boton? <br>
       Bueno este sabes que te amo vrd? jajajaa yo se que si mi niña hermosa. <br>
-      Pero bueno picale al otro boton que esta en la esquina derecha. 😝
+      Pero bueno ahora escoje y picale al boton que quieras. 😝
       
-      <!-- 📌 Redirección exacta a pagina2index.html -->
-      <button class="boton-esquina-derecha" onclick="window.location.href='pagina2index.html'">UUUUUUU que sera esto</button>
+      <!-- 🔄 Contenedor con los dos botones -->
+      <div class="contenedor-botones-esquina">
+          <!-- Modifica el texto entre las etiquetas y el alert si quieres que haga otra cosa -->
+          <button class="boton-esquina-arriba" onclick="window.location.href='pagina3index.html'"> esta es la pequeña compensacion</button>
+          
+          <!-- Este es tu botón original -->
+          <button class="boton-esquina-derecha" onclick="window.location.href='pagina2index.html'">UUUUUUU que sera esto</button>
+          
+      </div>
+
   </div>
 
   <!-- El elemento de video de fondo -->
@@ -230,16 +305,20 @@
 
               // Eliminamos el anclaje inferior para permitir el movimiento libre
               boton.style.bottom = 'auto';
-
-              // Mantiene el rango seguro calibrado para tu monitor de 20x12 pulgadas
-              const xAleatorio = 60 + (Math.random() * (window.innerWidth - 320));
-              const yAleatorio = window.innerHeight * 0.45 + (Math.random() * (window.innerHeight * 0.35));
+              // Evita que el botón se salga por la derecha en pantallas chicas
+              const anchoBoton = 210;
+              const limiteX = window.innerWidth - anchoBoton - 20;
+              const xAleatorio = Math.max(10, Math.random() * limiteX);
+              
+              // Evita que el botón tape el título de arriba
+              const inicioY = window.innerHeight * 0.35;
+              const altoMovimiento = window.innerHeight * 0.45;
+              const yAleatorio = inicioY + (Math.random() * altoMovimiento);
 
               // Aplicamos la nueva posición
               boton.style.left = `${xAleatorio}px`;
               boton.style.top = `${yAleatorio}px`;
 
-              boton.blur();
           } else {
               // 3. Cuando llega a los 20 clics, el botón desaparece y sale la sorpresa
               boton.style.display = 'none';
