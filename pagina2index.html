@@ -419,6 +419,25 @@
         <img id="fotoOculta8" class="foto-secreta" src="Alexaminiña.jpeg" alt="Octava sorpresa para Alexa">
     </div>
 
+        <!-- 📦 NOVENA SECCIÓN INTERACTIVA 9 (Botón a la izquierda, intercalado) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <!-- Botón 9 inicia oculto con la clase secuencial -->
+            <button id="btn9" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarNovenoSecreto()"> alfin lo konsegui dioz mio</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto9" class="texto-secreto">
+               probablemente esto lo veas el martes en la noche aprox pero aver ke puedo decir de esta fotiko ke dioz esta uy por fin
+               joder voi llorar despues de tanto tiempo pude reunir esta foto diooooooz kom batalle jajaja y mas por que eres mañosa
+               me acuerdo de la primera vez que me la mandaste nomas fue una vez y no me dejaste quedarmela muy mal que mañosa pero bueno
+               despues de todo la consegui y uy valio la pena que wuapa mi niña jajaja arece chinita mi niña jajajaja pero igual te vez bonita
+               y gracias por la foto enserio que la espere un chingo.
+            </div>
+        </div>
+        <img id="fotoOculta9" class="foto-secreta" src="Alexadormilona.jpeg" alt="Novena sorpresa para Alexa">
+    </div>
+
+
     </div>
 
      <!-- 🧠 Lógica secuencial: Revela contenido y desbloquea el siguiente botón -->
@@ -517,11 +536,23 @@
          function revelarOctavoSecreto() {
             const txt8 = document.getElementById('textoOculto8');
             const img8 = document.getElementById('fotoOculta8');
-            
+            const nextBtn = document.getElementById('btn9')
+
             txt8.classList.toggle('revelado');
             img8.classList.toggle('mostrar');
+
+             if(txt8.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
         }
 
+                 function revelarNovenoSecreto() {
+            const txt9 = document.getElementById('textoOculto9');
+            const img9 = document.getElementById('fotoOculta9');
+            
+            txt9.classList.toggle('revelado');
+            img9.classList.toggle('mostrar');
+        }
 
     </script>
 

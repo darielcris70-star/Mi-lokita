@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zona de jueguitos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            user-select: none;
+        }
+
+        /* Capa del fondo de estrellas general de la web */
+        #starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: var(--opacity);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* TÍTULO CENTRAL SUPERIOR */
+        #main-title {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-align: center;
+            z-index: 10;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                         0 0 20px rgba(0, 181, 226, 0.4);
+        }
+        /* --- BOTONES LANZADORES FLOTANTES --- */
+        .launcher-btn {
+            position: fixed;
+            left: 55px;
+            width: 95px;
+            height: 95px;
+            border: 3px solid #ffffff;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            overflow: hidden;
+        }
+
+        /* 1. Lanzador del Juego del Avión (Rojo) */
+        #game-launcher-plane {
+            top: 30%;
+            transform: translateY(-50%);
+            background-color: #E53935; 
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.4);
+        }
+
+        /* 2. Lanzador del Juego de Buscar (Fondo Azul Cielo) */
+        #game-launcher-search {
+            top: 48%;
+            transform: translateY(-50%);
+            background-color: #29b6f6; 
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(41, 182, 246, 0.4);
+        }
+
+        .launcher-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .launcher-image {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        /* Cuadro de texto explicativo a la derecha de los botones */
+        #arcade-description {
+            position: fixed;
+            left: 175px; 
+            top: 39%;
+            transform: translateY(-50%);
+            max-width: 320px;
+            background: rgba(255, 255, 255, 0.1); 
+            border-left: 4px solid #ffffff; 
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            backdrop-filter: blur(5px);
+            z-index: 95;
+            transition: opacity 0.3s;
+        }
+
+        #arcade-description h2 {
+            font-size: 20px; 
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5), 
+                         0 0 15px rgba(0, 181, 226, 0.4);
+        }
+
+        #arcade-description p {
+            font-size: 13px; 
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #ffffff;
+            line-height: 1.5;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 
+                         0 0 10px rgba(0, 181, 226, 0.2);
+        }
+
+        /* --- CONTENEDORES OCULTOS (OVERLAYS) --- */
+        .game-overlay-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.9); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .game-overlay-window.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* --- ESTILOS JUEGO AVION --- */
+        #game-container-plane {
+            position: relative;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #planeCanvas {
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+            display: block;
+            max-height: 75vh;
+            width: auto;
+            aspect-ratio: 500 / 600; 
+        }
+
+        #score-board-plane {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
+            z-index: 10;
+        }
+
+        /* --- ESTILOS JUEGO BUSCAR --- */
+        #search-container-ui {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #game-bar-search {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 5px solid #000000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 60;
+            padding: 0 20px;
+            color: black;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .stat-box {
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        .stat-box span {
+            color: #e53935;
+            font-weight: 900;
+        }
+
+        #searchCanvas {
+            display: block;
+            background-color: #eef7ff;
+            cursor: crosshair;
+            width: 100%;
+            height: 100%;
+        }
+
+        .comic-panel {
+            background: #ffffff;
+            border: 5px solid #000000;
+            padding: 35px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 10px 10px 0px #000000;
+            max-width: 450px;
+            width: 90%;
+            color: black;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .comic-panel h1 { font-size: 32px; margin-bottom: 12px; }
+        .comic-panel p { font-size: 15px; margin-bottom: 20px; color: #333; }
+
+        .comic-btn {
+            background: #e53935; color: white; border: 4px solid #000000;
+            padding: 10px 25px; font-size: 18px; cursor: pointer;
+            border-radius: 6px; box-shadow: 4px 4px 0px #000000;
+            text-transform: uppercase; font-family: 'Arial Black', sans-serif;
+        }
+
+        .comic-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000000; }
+
+        .search-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(244, 180, 0, 0.95);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 65;
+        }
+
+        .hidden { display: none !important; }
+
+        #instructions {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 14px; text-shadow: 1px 1px 2px #000000; text-align: center;
+            pointer-events: none; opacity: 0.8; width: 90%;
+        }
+
+        .close-button {
+            position: absolute; top: 15px; right: 20px;
+            background: #FF3366; border: 2px solid white; color: white;
+            width: 40px; height: 40px; border-radius: 50%;
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 70;
+        }
+        .close-button:hover { background: #E53935; }
+    </style>
+</head>
+<body>
+
+    <!-- Capa de estrellas del fondo general de la web -->
+    <div id="starfield"></div>
+
+    <!-- Título principal de la estación arcade -->
+    <h1 id="main-title">tu zona de jueguitoz para mi lokita</h1>
+
+    <!-- 1. Lanzador del Juego del Avión -->
+    <div id="game-launcher-plane" class="launcher-btn" title="¡Jugar Snoopy Flight!">
+        <img src="snoopy.png" alt="Snoopy Avión" class="launcher-image">
+    </div>
+
+    <!-- 2. Lanzador del Juego de Buscar -->
+    <div id="game-launcher-search" class="launcher-btn" title="¡Buscar a Snoopy!">
+        <img src="casita.png" alt="Casita Buscar" class="launcher-image">
+    </div>
+
+    <!-- Texto informativo al lado de los juegos -->
+    <div id="arcade-description">
+        <h2>lehechion esta informeichon</h2>
+        <p>Todavia no esta completa esta pagina pero esk ijuetuputamadre estoy un poco asta la madre entonces mira pues esta medio medio terminado asi que
+            ay esta disfrutalo aunque prometo terminarlo.
+        </p>
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- VENTANA EMERGENTE: JUEGO SNOOPY AVIÓN               -->
+    <!-- =================================================== -->
+    <div id="plane-overlay" class="game-overlay-window">
+        <div id="game-container-plane">
+            <button id="close-plane-btn" class="close-button">&times;</button>
+            <div id="score-board-plane">0</div>
+            <canvas id="planeCanvas" width="500" height="600"></canvas>
+            <div id="instructions">Si llegas a 500 y lo demuestras dejare de tomar coca mientras estamos juntos promesa</div>
+        </div>
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- VENTANA EMERGENTE: JUEGO BUSCAR A SNOOPY           -->
+    <!-- =================================================== -->
+    <div id="search-overlay" class="game-overlay-window">
+        <button id="close-search-btn" class="close-button">&times;</button>
+        
+        <div id="search-container-ui">
+            <!-- Barra de Estado Superior de Buscar -->
+            <div id="game-bar-search">
+                <div class="stat-box" id="level-display">Nivel: <span>1</span></div>
+                <div class="stat-box" id="timer-display">Tiempo: <span>45s</span></div>
+                <div class="stat-box" id="score-display">Puntos: <span>0</span></div>
+            </div>
+
+            <!-- Pantalla Interna de Inicio (Buscar) -->
+            <div id="start-screen-search" class="search-screen">
+                <div class="comic-panel">
+                    <h1>buscar al snoopy</h1>
+                    <p>busca al soopy en el avion y si no lo allas ke segatona estais jajaja no te creas corazon</p>
+                    <button class="comic-btn" id="start-search-btn">buscaler</button>
+                </div>
+            </div>
+
+            <!-- Pantalla Interna de Fin de Juego (Buscar) -->
+            <div id="gameover-screen-search" class="search-screen hidden">
+                <div class="comic-panel">
+                    <h1 id="go-title-search">se te acabo el tiempo nuv</h1>
+                    <p id="go-msg-search">mas suerte pa la otra nuv</p>
+                    <button class="comic-btn" id="restart-search-btn">Jugar otra veis</button>
+                </div>
+            </div>
+
+            <!-- Canvas de Buscar a Snoopy -->
+            <canvas id="searchCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // --- GENERADOR DE ESTRELLAS DE FONDO GENERAL DE LA WEB ---
+        const starfield = document.getElementById('starfield');
+        const totalStars = 120;
+
+        for (let i = 0; i < totalStars; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100; 
+            const size = Math.random() * 2.5 + 0.5; 
+            const duration = Math.random() * 3 + 2; 
+            const opacity = Math.random() * 0.8 + 0.2;
+
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.setProperty('--opacity', opacity);
+            starfield.appendChild(star);
+        }
+
+        // --- ENLAZAR LA IMAGEN DE SNOOPY TRANSPARENTE COMPARTIDA ---
+        const snoopyImg = new Image();
+        snoopyImg.src = "snoopy.png";
+        // --- CONTROLADORES DE MODALES Y LANZADORES ---
+        const launcherPlane = document.getElementById('game-launcher-plane');
+        const launcherSearch = document.getElementById('game-launcher-search');
+        const overlayPlane = document.getElementById('plane-overlay');
+        const overlaySearch = document.getElementById('search-overlay');
+        const closePlaneBtn = document.getElementById('close-plane-btn');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+        const arcadeDesc = document.getElementById('arcade-description');
+
+        function toggleLaunchers(show) {
+            const displayStyle = show ? 'flex' : 'none';
+            launcherPlane.style.display = displayStyle;
+            launcherSearch.style.display = displayStyle;
+            arcadeDesc.style.display = show ? 'block' : 'none';
+        }
+
+        launcherPlane.addEventListener('click', () => {
+            overlayPlane.classList.add('active');
+            toggleLaunchers(false);
+            resetPlaneGame();
+        });
+
+        closePlaneBtn.addEventListener('click', () => {
+            overlayPlane.classList.remove('active');
+            toggleLaunchers(true);
+            planeGameStarted = false;
+            planeGameOver = false;
+        });
+
+        launcherSearch.addEventListener('click', () => {
+            overlaySearch.classList.add('active');
+            toggleLaunchers(false);
+            initSearchGameLayout();
+        });
+
+        closeSearchBtn.addEventListener('click', () => {
+            overlaySearch.classList.remove('active');
+            toggleLaunchers(true);
+            searchGameActive = false;
+            clearInterval(searchTimerInterval);
+        });
+
+        // ===================================================
+        // MOTOR DEL JUEGO: SNOOPY AVIÓN
+        // ===================================================
+        const planeCanvas = document.getElementById("planeCanvas");
+        const ctxPlane = planeCanvas.getContext("2d");
+        const scoreBoardPlane = document.getElementById("score-board-plane");
+
+        let planeGameStarted = false;
+        let planeGameOver = false;
+        let planeScore = 0;
+        let planeIsPressing = false;
+
+        const planeClouds = [
+            { x: 20,  y: 60,  w: 220, h: 10, speed: 0.15 }, 
+            { x: 300, y: 110, w: 160, h: 8,  speed: 0.25 }, 
+            { x: 100, y: 180, w: 290, h: 14, speed: 0.1  }, 
+            { x: 260, y: 240, w: 190, h: 10, speed: 0.2  }, 
+            { x: 50,  y: 290, w: 250, h: 12, speed: 0.12 }
+        ];
+
+        const planeSnoopy = {
+            x: 60, y: 240, width: 75, height: 85,         
+            gravity: 0.35, thrust: 0.45, velocity: 0, maxSpeed: 6,        
+
+            draw: function() {
+                ctxPlane.save();
+                ctxPlane.translate(this.x + this.width / 2, this.y + this.height / 2);
+                let angle = this.velocity * 0.05;
+                ctxPlane.rotate(angle);
+
+                if (planeIsPressing && planeGameStarted && !planeGameOver) {
+                    ctxPlane.fillStyle = Math.random() > 0.5 ? "#FF9800" : "#FF5722";
+                    ctxPlane.beginPath();
+                    ctxPlane.moveTo(-this.width / 2 + 5, -2);
+                    ctxPlane.lineTo(-this.width / 2 - 15, 0);
+                    ctxPlane.lineTo(-this.width / 2 + 5, 2);
+                    ctxPlane.fill();
+                }
+
+                ctxPlane.drawImage(snoopyImg, -this.width / 2, -this.height / 2, this.width, this.height);
+                ctxPlane.restore();
+            }
+        };
+
+        function drawPlaneCloud(cx, cy, cw, ch) {
+            ctxPlane.save();
+            ctxPlane.fillStyle = "rgba(164, 219, 255, 0.55)"; 
+            ctxPlane.beginPath();
+            ctxPlane.moveTo(cx + ch, cy); ctxPlane.lineTo(cx + cw - ch, cy);
+            ctxPlane.quadraticCurveTo(cx + cw, cy + ch / 2, cx + cw - ch, cy + ch);
+            ctxPlane.lineTo(cx + ch, cy + ch);
+            ctxPlane.quadraticCurveTo(cx, cy + ch / 2, cx + ch, cy);
+            ctxPlane.closePath(); ctxPlane.fill();
+            ctxPlane.fillStyle = "rgba(164, 219, 255, 0.35)";
+            ctxPlane.fillRect(cx + ch * 2, cy + ch - 2, cw - ch * 4, 1.5);
+            ctxPlane.restore();
+        }
+
+        const planePipes = [];
+        const pipeWidth = 72; const pipeGap = 185; const pipeSpeed = 2.5;
+        let pipeTimer = 0;
+
+        function spawnPlanePipe() {
+            const minHeight = 60;
+            const maxHeight = planeCanvas.height - pipeGap - 90;
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            planePipes.push({ x: planeCanvas.width, top: topHeight, bottom: planeCanvas.height - (topHeight + pipeGap), passed: false });
+        }
+        function drawMarioPipe(x, y, height, isTop) {
+            ctxPlane.save();
+            const baseGreen = "#39b525"; const darkGreen = "#109418"; const lightGreen = "#5ce73d"; const strokeColor = "#1a1a1a"; 
+            const pixel = 4; const capHeight = 32; const capWidth = pipeWidth;
+            const bodyWidth = pipeWidth - (pixel * 4); const bodyX = x + (pixel * 2);
+            let capY = isTop ? (y + height - capHeight) : y;
+            let bodyY = isTop ? y : (y + capHeight); let bodyH = height - capHeight;
+            ctxPlane.imageSmoothingEnabled = false;
+
+            ctxPlane.fillStyle = baseGreen; ctxPlane.fillRect(bodyX, bodyY, bodyWidth, bodyH);
+            ctxPlane.fillStyle = lightGreen; ctxPlane.fillRect(bodyX + (pixel * 2), bodyY, pixel * 2, bodyH);
+            ctxPlane.fillStyle = darkGreen; ctxPlane.fillRect(bodyX + bodyWidth - (pixel * 3), bodyY, pixel * 3, bodyH);
+
+            if (isTop) {
+                ctxPlane.fillRect(bodyX + bodyWidth - (pixel * 5), bodyY, pixel * 2, pixel * 4);
+                ctxPlane.fillRect(bodyX + bodyWidth - (pixel * 7), bodyY, pixel * 2, pixel * 2);
+            } else {
+                ctxPlane.fillRect(bodyX + bodyWidth - (pixel * 5), bodyY + bodyH - (pixel * 4), pixel * 2, pixel * 4);
+                ctxPlane.fillRect(bodyX + bodyWidth - (pixel * 7), bodyY + bodyH - (pixel * 2), pixel * 2, pixel * 2);
+            }
+            ctxPlane.strokeStyle = strokeColor; ctxPlane.lineWidth = pixel; ctxPlane.strokeRect(bodyX + (pixel / 2), bodyY, bodyWidth - pixel, bodyH);
+
+            ctxPlane.fillStyle = baseGreen; ctxPlane.fillRect(x, capY, capWidth, capHeight);
+            ctxPlane.fillStyle = lightGreen; ctxPlane.fillRect(x + (pixel * 2), capY + (pixel * 2), pixel * 3, pixel); 
+            ctxPlane.fillRect(x + (pixel * 2), capY + (pixel * 3), pixel, pixel * 2); 
+            ctxPlane.fillStyle = darkGreen; ctxPlane.fillRect(x + capWidth - (pixel * 3), capY, pixel * 3, capHeight);
+            ctxPlane.strokeRect(x + (pixel / 2), capY + (pixel / 2), capWidth - pixel, capHeight - pixel);
+            ctxPlane.restore();
+        }
+
+        function startPlaneAction() {
+            if (planeGameOver) { resetPlaneGame(); return; }
+            if (!planeGameStarted) planeGameStarted = true;
+            planeIsPressing = true;
+        }
+        function stopPlaneAction() { planeIsPressing = false; }
+
+        window.addEventListener("keydown", (e) => {
+            if (!overlayPlane.classList.contains('active')) return;
+            if (e.code === "Space" || e.code === "ArrowUp") { startPlaneAction(); e.preventDefault(); }
+        });
+        window.addEventListener("keyup", (e) => {
+            if (e.code === "Space" || e.code === "ArrowUp") stopPlaneAction();
+        });
+
+        planeCanvas.addEventListener("mousedown", startPlaneAction);
+        planeCanvas.addEventListener("mouseup", stopPlaneAction);
+        planeCanvas.addEventListener("touchstart", (e) => { startPlaneAction(); e.preventDefault(); });
+        planeCanvas.addEventListener("touchend", stopPlaneAction);
+
+        function resetPlaneGame() {
+            planeSnoopy.y = 240; planeSnoopy.velocity = 0; planePipes.length = 0;
+            planeScore = 0; scoreBoardPlane.innerText = planeScore; pipeTimer = 0;
+            planeGameOver = false; planeGameStarted = false; planeIsPressing = false;
+        }
+
+        function updatePlaneGame() {
+            if (!overlayPlane.classList.contains('active')) { requestAnimationFrame(updatePlaneGame); return; }
+            let skyGradient = ctxPlane.createLinearGradient(0, 0, 0, planeCanvas.height);
+            skyGradient.addColorStop(0.0, "#56baff"); skyGradient.addColorStop(0.4, "#7ecbff"); 
+            skyGradient.addColorStop(0.8, "#caefff"); skyGradient.addColorStop(1.0, "#f6f7db"); 
+            ctxPlane.fillStyle = skyGradient; ctxPlane.fillRect(0, 0, planeCanvas.width, planeCanvas.height);
+
+            planeClouds.forEach(cloud => {
+                if (planeGameStarted && !planeGameOver) {
+                    cloud.x -= cloud.speed;
+                    if (cloud.x + cloud.w < 0) { cloud.x = planeCanvas.width + 30; cloud.y = Math.random() * 260 + 40; }
+                }
+                drawPlaneCloud(cloud.x, cloud.y, cloud.w, cloud.h);
+            });
+
+            if (planeGameStarted && !planeGameOver) {
+                planeSnoopy.velocity += planeIsPressing ? -planeSnoopy.thrust : planeSnoopy.gravity;
+                if (planeSnoopy.velocity > planeSnoopy.maxSpeed) planeSnoopy.velocity = planeSnoopy.maxSpeed;
+                if (planeSnoopy.velocity < -planeSnoopy.maxSpeed) planeSnoopy.velocity = -planeSnoopy.maxSpeed;
+                planeSnoopy.y += planeSnoopy.velocity;
+
+                pipeTimer++;
+                if (pipeTimer % 125 === 0) spawnPlanePipe();
+
+                for (let i = planePipes.length - 1; i >= 0; i--) {
+                    planePipes[i].x -= pipeSpeed;
+                    if (!planePipes[i].passed && planePipes[i].x + pipeWidth < planeSnoopy.x) {
+                        planeScore++; scoreBoardPlane.innerText = planeScore; planePipes[i].passed = true;
+                    }
+                    if (planeSnoopy.x + 14 < planePipes[i].x + pipeWidth && planeSnoopy.x + planeSnoopy.width - 14 > planePipes[i].x &&
+                        (planeSnoopy.y + 14 < planePipes[i].top || planeSnoopy.y + planeSnoopy.height - 14 > planeCanvas.height - planePipes[i].bottom)) {
+                        planeGameOver = true;
+                    }
+                    if (planePipes[i].x + pipeWidth < 0) planePipes.splice(i, 1);
+                }
+                if (planeSnoopy.y + planeSnoopy.height >= planeCanvas.height || planeSnoopy.y <= 0) planeGameOver = true;
+            }
+
+            planePipes.forEach(pipe => { drawMarioPipe(pipe.x, 0, pipe.top, true); drawMarioPipe(pipe.x, planeCanvas.height - pipe.bottom, pipe.bottom, false); });
+            planeSnoopy.draw();
+
+            if (!planeGameStarted) {
+                ctxPlane.fillStyle = "rgba(0, 0, 0, 0.5)"; ctxPlane.fillRect(0, 0, planeCanvas.width, planeCanvas.height);
+                ctxPlane.fillStyle = "#FFFFFF"; ctxPlane.font = "bold 24px Arial"; ctxPlane.textAlign = "center";
+                ctxPlane.fillText("SNOOPY SKY FLIGHT", planeCanvas.width / 2, planeCanvas.height / 2 - 20);
+                ctxPlane.font = "14px Arial"; ctxPlane.fillText("Mantén presionado para volar", planeCanvas.width / 2, planeCanvas.height / 2 + 20);
+            }
+            if (planeGameOver) {
+                ctxPlane.fillStyle = "rgba(0, 0, 0, 0.7)"; ctxPlane.fillRect(0, 0, planeCanvas.width, planeCanvas.height);
+                ctxPlane.fillStyle = "#FF3366"; ctxPlane.font = "bold 32px Arial"; ctxPlane.textAlign = "center";
+                ctxPlane.fillText("¡CRASH!", planeCanvas.width / 2, planeCanvas.height / 2 - 20);
+                ctxPlane.fillStyle = "#FFFFFF"; ctxPlane.font = "14px Arial"; ctxPlane.fillText("Haz clic para reiniciar", planeCanvas.width / 2, planeCanvas.height / 2 + 20);
+            }
+            requestAnimationFrame(updatePlaneGame);
+        }
+        updatePlaneGame();
+        // ===================================================
+        // MOTOR DEL JUEGO: ¿DÓNDE ESTÁ SNOOPY? (ESTILO WALLY)
+        // ===================================================
+        const searchCanvas = document.getElementById("searchCanvas"); 
+        const ctxSearch = searchCanvas.getContext("2d");
+
+        const startScreenSearch = document.getElementById("start-screen-search"); 
+        const gameoverScreenSearch = document.getElementById("gameover-screen-search");
+        const startSearchBtn = document.getElementById("start-search-btn"); 
+        const restartSearchBtn = document.getElementById("restart-search-btn");
+        
+        const searchLevelDisplay = document.getElementById("level-display").querySelector("span"); 
+        const searchTimerDisplay = document.getElementById("timer-display").querySelector("span");
+        const searchScoreDisplay = document.getElementById("score-display").querySelector("span"); 
+        const goTitleSearch = document.getElementById("go-title-search"); 
+        const goMsgSearch = document.getElementById("go-msg-search");
+
+        let searchLevel = 1; 
+        let searchScore = 0; 
+        let searchTimeLeft = 45; 
+        let searchGameActive = false; 
+        let searchTimerInterval = null; 
+        let searchCharacters = []; 
+        let searchTargetSnoopy = null;
+
+        const casitaImg = new Image(); casitaImg.src = "casita.png";
+        const snoopyParadoImg = new Image(); snoopyParadoImg.src = "snoopyparado.png";
+
+        // ===================================================
+        // ⚙️ VARIABLES DE CONTROL DE TAMAÑO (MODIFÍCALAS AQUÍ)
+        // ===================================================
+        // Dimensiones independientes para el Snoopy real en el avión
+        const targetWidth = 60; 
+        const targetHeight = 70;
+
+        // Variable única compartida para TODOS los impostores de la multitud
+        const impostorWidth = 85; 
+        const impostorHeight = 95;
+        // ===================================================
+
+        class SearchCharacter {
+            constructor(isTarget) {
+                this.isTarget = isTarget; 
+                this.w = this.isTarget ? targetWidth : impostorWidth; 
+                this.h = this.isTarget ? targetHeight : impostorHeight;
+                this.x = Math.random() * (searchCanvas.width - this.w); 
+                this.y = Math.random() * (searchCanvas.height - this.h - 100) + 80;
+                this.vx = (Math.random() - 0.5) * (1.5 + searchLevel * 0.2); 
+                this.vy = (Math.random() - 0.5) * (1.5 + searchLevel * 0.2);
+                if (!this.isTarget) this.type = Math.floor(Math.random() * 4);
+            }
+
+            update() { 
+                this.x += this.vx; 
+                this.y += this.vy; 
+                if (this.x <= 0 || this.x + this.w >= searchCanvas.width) this.vx *= -1; 
+                if (this.y <= 70 || this.y + this.h >= searchCanvas.height) this.vy *= -1; 
+            }
+
+            draw() {
+                if (this.isTarget) { 
+                    ctxSearch.drawImage(snoopyImg, this.x, this.y, this.w, this.h); 
+                } else {
+                    ctxSearch.save(); 
+                    ctxSearch.translate(this.x + this.w / 2, this.y + this.h / 2); 
+                    if (this.vx < 0) ctxSearch.scale(-1, 1);
+                    ctxSearch.lineWidth = 3; 
+                    ctxSearch.strokeStyle = "#000000";
+
+                    if (this.type === 0) { 
+                        ctxSearch.drawImage(casitaImg, -this.w / 2, -this.h / 2, this.w, this.h); 
+                    } else if (this.type === 1) {
+                        ctxSearch.scale(this.w / 85, this.h / 95); 
+                        ctxSearch.fillStyle = this.x % 2 === 0 ? "#4285f4" : "#e91e63";
+                        ctxSearch.beginPath(); ctxSearch.moveTo(-15, 25); ctxSearch.lineTo(15, 25); ctxSearch.lineTo(0, -10); ctxSearch.closePath(); ctxSearch.fill(); ctxSearch.stroke();
+                        ctxSearch.fillStyle = "#fbc02d"; ctxSearch.beginPath(); ctxSearch.arc(0, -15, 14, 0, Math.PI * 2); ctxSearch.fill(); ctxSearch.stroke();
+                    } else if (this.type === 2) { 
+                        ctxSearch.drawImage(snoopyParadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
+                    } else {
+                        ctxSearch.scale(this.w / 85, this.h / 95); 
+                        ctxSearch.fillStyle = "#e53935"; ctxSearch.fillRect(-12, 4, 24, 18); ctxSearch.strokeRect(-12, 4, 24, 18);
+                        ctxSearch.fillStyle = "#ffffff"; ctxSearch.beginPath(); ctxSearch.arc(0, -12, 14, 0, Math.PI * 2); ctxSearch.fill(); ctxSearch.stroke();
+                    }
+                    ctxSearch.restore();
+                }
+            }
+        }
+        function resizeSearchCanvas() { 
+            searchCanvas.width = window.innerWidth; 
+            searchCanvas.height = window.innerHeight; 
+            if (searchGameActive) generateSearchCrowd(); 
+        }
+        window.addEventListener("resize", resizeSearchCanvas);
+
+        function generateSearchCrowd() { 
+            searchCharacters = []; 
+            searchTargetSnoopy = new SearchCharacter(true); 
+            searchCharacters.push(searchTargetSnoopy); 
+            let crowdSize = 40 + (searchLevel * 15); 
+            if (crowdSize > 250) crowdSize = 250; 
+            for (let i = 0; i < crowdSize; i++) {
+                searchCharacters.push(new SearchCharacter(false)); 
+            }
+            searchCharacters.sort(() => Math.random() - 0.5); 
+        }
+
+        function updateSearchGame() { 
+            if (!searchGameActive) return; 
+            ctxSearch.clearRect(0, 0, searchCanvas.width, searchCanvas.height); 
+            searchCharacters.forEach(char => { char.update(); char.draw(); }); 
+            requestAnimationFrame(updateSearchGame); 
+        }
+
+        function startSearchTimer() { 
+            clearInterval(searchTimerInterval); 
+            searchTimerInterval = setInterval(() => { 
+                searchTimeLeft--; 
+                searchTimerDisplay.innerText = searchTimeLeft + "s"; 
+                if (searchTimeLeft <= 0) endSearchGame(false); 
+            }, 1000); 
+        }
+
+        searchCanvas.addEventListener("mousedown", (e) => {
+            if (!searchGameActive) return; 
+            const rect = searchCanvas.getBoundingClientRect(); 
+            const clickX = e.clientX - rect.left; 
+            const clickY = e.clientY - rect.top;
+
+            if (clickX >= searchTargetSnoopy.x && clickX <= searchTargetSnoopy.x + searchTargetSnoopy.w && 
+                clickY >= searchTargetSnoopy.y && clickY <= searchTargetSnoopy.y + searchTargetSnoopy.h) {
+                // ¡Acertaste al Snoopy Real! Avanza de nivel
+                searchLevel++; 
+                searchScore += 100 + (searchTimeLeft * 2); 
+                searchTimeLeft += 15; 
+                if (searchTimeLeft > 60) searchTimeLeft = 60;
+                
+                searchLevelDisplay.innerText = searchLevel; 
+                searchScoreDisplay.innerText = searchScore; 
+                searchTimerDisplay.innerText = searchTimeLeft + "s"; 
+                generateSearchCrowd();
+            } else {
+                // Penalización por hacer clic en el lugar incorrecto
+                searchTimeLeft -= 4; 
+                if (searchTimeLeft < 0) searchTimeLeft = 0; 
+                searchTimerDisplay.innerText = searchTimeLeft + "s"; 
+                searchTimerDisplay.parentElement.style.color = "#e53935";
+                setTimeout(() => { searchTimerDisplay.parentElement.style.color = "#000000"; }, 200);
+            }
+        });
+
+        function initSearchGameLayout() { 
+            searchGameActive = false; 
+            startScreenSearch.classList.remove("hidden"); 
+            gameoverScreenSearch.classList.add("hidden"); 
+            resizeSearchCanvas(); 
+            ctxSearch.clearRect(0, 0, searchCanvas.width, searchCanvas.height); 
+        }
+
+        function startSearchGame() { 
+            searchLevel = 1; 
+            searchScore = 0; 
+            searchTimeLeft = 45; 
+            searchGameActive = true; 
+            searchLevelDisplay.innerText = searchLevel; 
+            searchScoreDisplay.innerText = searchScore; 
+            searchTimerDisplay.innerText = searchTimeLeft + "s"; 
+            startScreenSearch.classList.add("hidden"); 
+            gameoverScreenSearch.classList.add("hidden"); 
+            generateSearchCrowd(); 
+            startSearchTimer(); 
+            updateSearchGame(); 
+        }
+
+        function endSearchGame(victory) { 
+            searchGameActive = false; 
+            clearInterval(searchTimerInterval); 
+            gameoverScreenSearch.classList.remove("hidden"); 
+            if (!victory) { 
+                goTitleSearch.innerText = "¡yyyy se te acabo el tiempo!"; 
+                goMsgSearch.innerText = `pinche segatona jajaja. Llegaste al Nivel ${searchLevel} con ${searchScore} puntos.`; 
+            } 
+        }
+
+        startSearchBtn.addEventListener("click", startSearchGame); 
+        restartSearchBtn.addEventListener("click", startSearchGame);
+    </script>
+</body>
+</html>
