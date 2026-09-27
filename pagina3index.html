@@ -129,7 +129,6 @@
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.5), 
                          0 0 15px rgba(0, 181, 226, 0.4);
         }
-
         #arcade-description p {
             font-size: 13px; 
             font-weight: 900;
@@ -245,7 +244,6 @@
             color: black;
             font-family: 'Arial Black', sans-serif;
         }
-
         .comic-panel h1 { font-size: 32px; margin-bottom: 12px; }
         .comic-panel p { font-size: 15px; margin-bottom: 20px; color: #333; }
 
@@ -361,7 +359,6 @@
             <canvas id="searchCanvas"></canvas>
         </div>
     </div>
-
     <script>
         // --- GENERADOR DE ESTRELLAS DE FONDO GENERAL DE LA WEB ---
         const starfield = document.getElementById('starfield');
@@ -385,9 +382,19 @@
             starfield.appendChild(star);
         }
 
-        // --- ENLAZAR LA IMAGEN DE SNOOPY TRANSPARENTE COMPARTIDA ---
+        // --- ENLAZAR LAS IMÁGENES DE TU JUEGO CON LOS NOMBRES EN MINÚSCULAS ---
         const snoopyImg = new Image();
         snoopyImg.src = "snoopy.png";
+
+        const casitaImg = new Image(); 
+        casitaImg.src = "casita.png";
+
+        const snoopyparadoImg = new Image(); 
+        snoopyparadoImg.src = "snoopyparado.png";
+
+        const carlitosImg = new Image(); 
+        carlitosImg.src = "carlitos.png";
+
         // --- CONTROLADORES DE MODALES Y LANZADORES ---
         const launcherPlane = document.getElementById('game-launcher-plane');
         const launcherSearch = document.getElementById('game-launcher-search');
@@ -449,7 +456,6 @@
             { x: 260, y: 240, w: 190, h: 10, speed: 0.2  }, 
             { x: 50,  y: 290, w: 250, h: 12, speed: 0.12 }
         ];
-
         const planeSnoopy = {
             x: 60, y: 240, width: 75, height: 85,         
             gravity: 0.35, thrust: 0.45, velocity: 0, maxSpeed: 6,        
@@ -547,7 +553,6 @@
         planeCanvas.addEventListener("mouseup", stopPlaneAction);
         planeCanvas.addEventListener("touchstart", (e) => { startPlaneAction(); e.preventDefault(); });
         planeCanvas.addEventListener("touchend", stopPlaneAction);
-
         function resetPlaneGame() {
             planeSnoopy.y = 240; planeSnoopy.velocity = 0; planePipes.length = 0;
             planeScore = 0; scoreBoardPlane.innerText = planeScore; pipeTimer = 0;
@@ -610,6 +615,7 @@
             requestAnimationFrame(updatePlaneGame);
         }
         updatePlaneGame();
+
         // ===================================================
         // MOTOR DEL JUEGO: ¿DÓNDE ESTÁ SNOOPY? (ESTILO WALLY)
         // ===================================================
@@ -635,20 +641,11 @@
         let searchCharacters = []; 
         let searchTargetSnoopy = null;
 
-        const casitaImg = new Image(); casitaImg.src = "casita.png";
-        const snoopyparadoImg = new Image(); snoopyparadoImg.src = "snoopyparado.png";
-
-        // ===================================================
-        // ⚙️ VARIABLES DE CONTROL DE TAMAÑO (MODIFÍCALAS AQUÍ)
-        // ===================================================
-        // Dimensiones independientes para el Snoopy real en el avión
+        // Variables de dimensiones para los personajes
         const targetWidth = 60; 
         const targetHeight = 70;
-
-        // Variable única compartida para TODOS los impostores de la multitud
         const impostorWidth = 85; 
         const impostorHeight = 95;
-        // ===================================================
 
         class SearchCharacter {
             constructor(isTarget) {
@@ -682,10 +679,8 @@
                     if (this.type === 0) { 
                         ctxSearch.drawImage(casitaImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else if (this.type === 1) {
-                        ctxSearch.scale(this.w / 85, this.h / 95); 
-                        ctxSearch.fillStyle = this.x % 2 === 0 ? "#4285f4" : "#e91e63";
-                        ctxSearch.beginPath(); ctxSearch.moveTo(-15, 25); ctxSearch.lineTo(15, 25); ctxSearch.lineTo(0, -10); ctxSearch.closePath(); ctxSearch.fill(); ctxSearch.stroke();
-                        ctxSearch.fillStyle = "#fbc02d"; ctxSearch.beginPath(); ctxSearch.arc(0, -15, 14, 0, Math.PI * 2); ctxSearch.fill(); ctxSearch.stroke();
+                        // AQUÍ ENTRA TU NUEVA IMAGEN DE CARLITOS EN MINÚSCULAS
+                        ctxSearch.drawImage(carlitosImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else if (this.type === 2) { 
                         ctxSearch.drawImage(snoopyparadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else {
