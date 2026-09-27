@@ -395,6 +395,9 @@
         const carlitosImg = new Image(); 
         carlitosImg.src = "carlitos.png";
 
+        const lucyImg = new Image(); 
+        lucyImg.src = "lucy.png";
+
         // --- CONTROLADORES DE MODALES Y LANZADORES ---
         const launcherPlane = document.getElementById('game-launcher-plane');
         const launcherSearch = document.getElementById('game-launcher-search');
@@ -679,14 +682,12 @@
                     if (this.type === 0) { 
                         ctxSearch.drawImage(casitaImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else if (this.type === 1) {
-                        // AQUÍ ENTRA TU NUEVA IMAGEN DE CARLITOS EN MINÚSCULAS
                         ctxSearch.drawImage(carlitosImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else if (this.type === 2) { 
                         ctxSearch.drawImage(snoopyparadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else {
-                        ctxSearch.scale(this.w / 85, this.h / 95); 
-                        ctxSearch.fillStyle = "#e53935"; ctxSearch.fillRect(-12, 4, 24, 18); ctxSearch.strokeRect(-12, 4, 24, 18);
-                        ctxSearch.fillStyle = "#ffffff"; ctxSearch.beginPath(); ctxSearch.arc(0, -12, 14, 0, Math.PI * 2); ctxSearch.fill(); ctxSearch.stroke();
+                        // AQUÍ ENTRA TU NUEVA IMAGEN DE LUCY EN LUGAR DEL ÚLTIMO RECTÁNGULO ABSTRACTO
+                        ctxSearch.drawImage(lucyImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     }
                     ctxSearch.restore();
                 }
