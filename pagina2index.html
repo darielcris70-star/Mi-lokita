@@ -456,6 +456,45 @@
         <img id="fotoOculta10" class="foto-secreta" src="Alexachuponsita.jpeg" alt="Decima sorpresa para Alexa">
     </div>
 
+    
+        <!-- 📦 Onceava SECCIÓN INTERACTIVA 9 (Botón a la izquierda, intercalado) -->
+    <div class="seccion-interactiva-horizontal">
+        <div class="zona-boton-izquierda">
+            <!-- Botón 9 inicia oculto con la clase secuencial -->
+            <button id="btn11" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarOnceavoSecreto()">chocolate abuelita</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto11" class="texto-secreto">
+               JAJAJAJAJAAJAJ que te puedo decir de esta foto que estas bien tiernita ira nomas te vez como la abuelita del chocolate abuelieta jajajaja
+               osea vamos apoko no lo ves eres identica y esa sonrisita que tienes en la foto te ase ver tiena asi apapachable abrazable y sobre todo hermosa y e velda
+               traes los lentes puestos lo mejor de todo al fin ora zi complete mi colecion de fotos o bueno eso creo creer no lo se pero ojo piojo como siempre
+               que pinche wapa estas alexa sin duda alguna y tal vez te preguntas por que tanta isistencia con lo de los lentes no? pues mmmmm me gusta de cierta
+               manera que la gente use lentes no digo que sea un gusto que se tenga que cumplir pues tu los usas pero no te gusta traerlos pero igual con o sin lentes me
+               gustas en especial desmakillada osiosiosiosiosi.
+            </div>
+        </div>
+        <img id="fotoOculta11" class="foto-secreta" src="Alexaabuelita.jpeg" alt="Novena sorpresa para Alexa">
+    </div>
+
+    
+        <!-- 📦 Doceava SECCIÓN INTERACTIVA 9 (Botón a la izquierda, intercalado) -->
+    <div class="seccion-interactiva-horizontal invertida">
+        <div class="zona-boton-derecha">
+            <!-- Botón 9 inicia oculto con la clase secuencial -->
+            <button id="btn12" class="btn-revelar-izq btn-oculto-secuencial" onclick="revelarDoceavoSecreto()">Uy la lluvia la lluvia jajaja</button>
+        </div>
+        <div class="bloque-desplegable-secreto">
+            <div id="textoOculto12" class="texto-secreto">
+               Uy pues mira nomas jajaja asueñada la niña pero por que por que la desperto la lluvia ay pobrecita mi niña hermosa no la deja  dormir la lluvia que mal
+               y pues si cierto si ocupabas dormir un poco mas aunque no digo que te veas mal solo que si se te ve que querias dormir mas y te conozco mosco se y estoy seguro
+               que as de estar pensando que te estoy diciendo pinche ojerosa por decirte que si necesitabas dormir mas y no............................bueno poquito jajajaja pero igual ya 
+               sabes que te vez preciosa con todo y tus ojeras de panda que ya se que no te gustan pero igual te vez bien no digas que no que te conozco y te pego ya te dije.
+            </div>
+        </div>
+        <img id="fotoOculta12" class="foto-secreta" src="Alexaojerosa.jpeg" alt="Decima sorpresa para Alexa">
+    </div>
+
+
 
     </div>
 
@@ -583,10 +622,40 @@
                  function revelarDecimoSecreto() {
             const txt10 = document.getElementById('textoOculto10');
             const img10 = document.getElementById('fotoOculta10');
-            
+            const nextBtn = document.getElementById('btn11')
+
             txt10.classList.toggle('revelado');
             img10.classList.toggle('mostrar');
+
+             if(txt10.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
         }
+
+        
+                 function revelarOnceavoSecreto() {
+            const txt11 = document.getElementById('textoOculto11');
+            const img11 = document.getElementById('fotoOculta11');
+             const nextBtn = document.getElementById('btn12')
+
+            txt11.classList.toggle('revelado');
+            img11.classList.toggle('mostrar');
+
+            
+             if(txt11.classList.contains('revelado')) {
+                nextBtn.classList.add('visible');
+            }
+        }
+        
+
+                 function revelarDoceavoSecreto() {
+            const txt12 = document.getElementById('textoOculto12');
+            const img12 = document.getElementById('fotoOculta12');
+            
+            txt12.classList.toggle('revelado');
+            img12.classList.toggle('mostrar');
+        }
+
 
     </script>
 
