@@ -60,7 +60,7 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
                          0 0 20px rgba(0, 181, 226, 0.4);
         }
-        /* --- BOTONES LANZADORES FLOTANTES --- */
+        /* --- BOTONES LANZADORES FLOTANTES (IZQUIERDA) --- */
         .launcher-btn {
             position: fixed;
             left: 55px;
@@ -94,17 +94,7 @@
             box-shadow: 0 8px 20px rgba(41, 182, 246, 0.4);
         }
 
-        .launcher-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .launcher-image {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-        }
-
-        /* Cuadro de texto explicativo a la derecha de los botones */
+        /* Cuadro de texto explicativo a la derecha de los botones de la izquierda */
         #arcade-description {
             position: fixed;
             left: 175px; 
@@ -160,6 +150,61 @@
             opacity: 1;
             pointer-events: auto;
         }
+        /* --- BOTÓN LANZADORES EVENTO DE HALLOWEEN (DERECHA) --- */
+        #halloween-launcher-container {
+            position: fixed;
+            right: 75px;
+            top: 40%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+        }
+
+        /* Título arriba de los botones de Halloween */
+        #halloween-tag {
+            font-size: 18px;
+            font-weight: 900;
+            color: #FF5722;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px #FF5722, 0 0 15px #9C27B0;
+            animation: pulse-orange 1.5s infinite ease-in-out;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        #game-launcher-maze {
+            width: 105px;
+            height: 105px;
+            background-color: #311B92; 
+            border: 3px solid #FF5722;
+            border-radius: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(255, 87, 34, 0.4), 0 0 25px rgba(49, 27, 146, 0.6);
+            overflow: hidden;
+        }
+
+        .launcher-btn:hover, #game-launcher-maze:hover {
+            transform: scale(1.1);
+        }
+
+        .launcher-image {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 15px #FF9800, 0 0 25px #FF5722; }
+        }
+
         /* --- ESTILOS JUEGO AVION --- */
         #game-container-plane {
             position: relative;
@@ -189,7 +234,6 @@
             text-shadow: 2px 2px 4px #000000;
             z-index: 10;
         }
-
         /* --- ESTILOS JUEGO BUSCAR --- */
         #search-container-ui {
             width: 100%;
@@ -244,6 +288,65 @@
             color: black;
             font-family: 'Arial Black', sans-serif;
         }
+
+        /* --- ESTILOS EXCLUSIVOS DEL LABERINTO DEL TERROR --- */
+        #maze-container-ui {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        #mazeCanvas {
+            border: 4px solid #FF5722;
+            background-color: #11052C;
+            box-shadow: 0 0 30px rgba(156, 39, 176, 0.4);
+            display: block;
+            cursor: none;
+        }
+
+        #maze-header {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 24px;
+            color: #FF9800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #maze-header span {
+            color: #9C27B0;
+            text-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
+        }
+
+        /* CAPA DEL SCREAMER (OCULTA POR DEFECTO) */
+        #screamer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #screamer-overlay.jumpscare {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #screamer-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .comic-panel h1 { font-size: 32px; margin-bottom: 12px; }
         .comic-panel p { font-size: 15px; margin-bottom: 20px; color: #333; }
 
@@ -291,22 +394,42 @@
     <!-- Título principal de la estación arcade -->
     <h1 id="main-title">tu zona de jueguitoz para mi lokita</h1>
 
-    <!-- 1. Lanzador del Juego del Avión -->
+    <!-- 1. Lanzador del Juego del Avión (Izquierda) -->
     <div id="game-launcher-plane" class="launcher-btn" title="¡Jugar Snoopy Flight!">
         <img src="snoopy.png" alt="Snoopy Avión" class="launcher-image">
     </div>
 
-    <!-- 2. Lanzador del Juego de Buscar -->
+    <!-- 2. Lanzador del Juego de Buscar (Izquierda) -->
     <div id="game-launcher-search" class="launcher-btn" title="¡Buscar a Snoopy!">
         <img src="casita.png" alt="Casita Buscar" class="launcher-image">
     </div>
 
-    <!-- Texto informativo al lado de los juegos -->
+    <!-- Texto informativo al lado de los juegos de la izquierda -->
     <div id="arcade-description">
         <h2>lehechion esta informeichon</h2>
-        <p>Todavia no esta completa esta pagina pero esk ijuetuputamadre estoy un poco asta la madre entonces mira pues esta medio medio terminado asi que
-            ay esta disfrutalo aunque prometo terminarlo.
+        <p>Mira te ise estos jueguitos de jalowin para que los juegyes y pues ya eso es todo y ya se luégo agrego juegos de los que me dijiste esk me da flojerita
+            a y pues eso ten ojo son de jalowin de ke es el mes? de terror asi que ya sabes ke tal vez y te lleves uno ke otro susto o nose tak vez o tal vez no 
+            pero eso y ps ya estan terminados los del avion y el de allar a snupy asi que estos son de jawolin jawolin asi ke disfruta mi niña ermosa te amo mucho mucho.
         </p>
+    </div>
+    <!-- =================================================== -->
+    <!-- LANZADORES DEL EVENTO DE HALLOWEEN (DERECHA)        -->
+    <!-- =================================================== -->
+    <div id="halloween-launcher-container" style="gap: 20px;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div id="halloween-tag">jawolin</div>
+            <div id="game-launcher-maze" title="¡EVENTO: Laberinto del Terror!">
+                <img src="casita.png" alt="Laberinto Terror" class="launcher-image">
+            </div>
+        </div>
+        
+        <!-- Icono de Atrapa Calabazas integrado en el bando de Halloween -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div id="halloween-tag" style="font-size: 14px; margin-bottom: 5px;">jawolin</div>
+            <div id="game-launcher-catch" class="launcher-btn" style="position: static; transform: none; width: 105px; height: 105px; background-color: #311B92; border: 3px solid #FF5722; border-radius: 24px; box-shadow: 0 0 15px rgba(255, 87, 34, 0.4);" title="¡Atrapa las Calabazas!">
+                <img src="snoopyparado.png" alt="Snoopy Atrapa" class="launcher-image">
+            </div>
+        </div>
     </div>
 
 
@@ -318,11 +441,9 @@
             <button id="close-plane-btn" class="close-button">&times;</button>
             <div id="score-board-plane">0</div>
             <canvas id="planeCanvas" width="500" height="600"></canvas>
-            <div id="instructions">Si llegas a 500 y lo demuestras dejare de tomar coca mientras estamos juntos promesa</div>
+            <div id="instructions">Si llegas a 999 y lo demuestras dejare de tomar coca mientras estamos juntos promesa</div>
         </div>
     </div>
-
-
     <!-- =================================================== -->
     <!-- VENTANA EMERGENTE: JUEGO BUSCAR A SNOOPY           -->
     <!-- =================================================== -->
@@ -330,14 +451,12 @@
         <button id="close-search-btn" class="close-button">&times;</button>
         
         <div id="search-container-ui">
-            <!-- Barra de Estado Superior de Buscar -->
             <div id="game-bar-search">
                 <div class="stat-box" id="level-display">Nivel: <span>1</span></div>
                 <div class="stat-box" id="timer-display">Tiempo: <span>45s</span></div>
                 <div class="stat-box" id="score-display">Puntos: <span>0</span></div>
             </div>
 
-            <!-- Pantalla Interna de Inicio (Buscar) -->
             <div id="start-screen-search" class="search-screen">
                 <div class="comic-panel">
                     <h1>buscar al snoopy</h1>
@@ -346,7 +465,6 @@
                 </div>
             </div>
 
-            <!-- Pantalla Interna de Fin de Juego (Buscar) -->
             <div id="gameover-screen-search" class="search-screen hidden">
                 <div class="comic-panel">
                     <h1 id="go-title-search">se te acabo el tiempo nuv</h1>
@@ -355,12 +473,66 @@
                 </div>
             </div>
 
-            <!-- Canvas de Buscar a Snoopy -->
             <canvas id="searchCanvas"></canvas>
         </div>
     </div>
+
+    <!-- =================================================== -->
+    <!-- VENTANA EMERGENTE: JUEGO JALOWIN ATRAPA LAS CALABAZAS -->
+    <!-- =================================================== -->
+    <div id="catch-overlay" class="game-overlay-window">
+        <div id="game-container-plane" style="width: 100%; max-width: 600px; height: 85vh; border: 4px solid #FF9800; border-radius: 12px; overflow: hidden; background: #11052C;">
+            <button id="close-catch-btn" class="close-button" style="border-color: #FF9800;">&times;</button>
+            
+            <div id="game-bar-search" style="position: relative; border-bottom: 5px solid #FF9800; width: 100%;">
+                <div class="stat-box" id="catch-lives-display">Vidas: <span style="color: #FF3366;">3</span></div>
+                <div class="stat-box" id="catch-score-display">Puntos: <span style="color: #FF9800;">0</span></div>
+            </div>
+
+            <div id="catch-start-screen" class="search-screen" style="background: rgba(255, 87, 34, 0.95); z-index: 61;">
+                <div class="comic-panel" style="border-color: #FF9800; box-shadow: 10px 10px 0px #FF9800;">
+                    <h1>atrapa loz dulcez</h1>
+                    <p>kon el maus mueves al snupy y atrapa los dulcez pero si tocas un fantasma pierdes vidas</p>
+                    <button class="comic-btn" id="start-catch-btn" style="background: #FF9800;">¡A JUGAR!</button>
+                </div>
+            </div>
+
+            <div id="catch-go-screen" class="search-screen hidden" style="background: rgba(0, 0, 0, 0.95); z-index: 61;">
+                <div class="comic-panel" style="border-color: #FF3366; box-shadow: 10px 10px 0px #FF3366;">
+                    <h1>Y pinche wey perido jajajaj nuv bot </h1>
+                    <p id="catch-go-msg">Puntuación: 0</p>
+                    <button class="comic-btn" id="restart-catch-btn" style="background: #FF3366;">otra ve?</button>
+                </div>
+            </div>
+
+            <canvas id="catchCanvas" style="background: #11052C; display: block; cursor: none; width: 100%; height: calc(100% - 70px);"></canvas>
+        </div>
+    </div>
+    <!-- =================================================== -->
+    <!-- VENTANA EMERGENTE: LABERINTO DE HALLOWEEN          -->
+    <!-- =================================================== -->
+    <div id="maze-overlay" class="game-overlay-window">
+        <button id="close-maze-btn" class="close-button">&times;</button>
+        <div id="maze-container-ui">
+            <div id="maze-header">Laberinto - Nivel: <span id="maze-level-txt">1</span>/7</div>
+            <canvas id="mazeCanvas" width="600" height="500"></canvas>
+            <div id="instructions" style="color: #FF5722; font-weight: bold;">es simple lleva la bolita verde a el cuadro y ci pierdes ps perdiste nuv</div>
+        </div>
+    </div>
+
+    <!-- =================================================== -->
+    <!-- CAPA SUPREMA: PANTALLA COMPLETA DEL SCREAMER         -->
+    <!-- =================================================== -->
+    <div id="screamer-overlay">
+        <img id="screamer-img" src="Alexamomo.png" alt="BUUU!">
+    </div>
+
     <script>
-        // --- GENERADOR DE ESTRELLAS DE FONDO GENERAL DE LA WEB ---
+        // ===================================================
+        // DECLARACIÓN GLOBAL DE VARIABLES E INTERFACES (FILTRO ANTI-ERRORES)
+        // ===================================================
+        
+        // --- 1. FONDO DE ESTRELLAS ---
         const starfield = document.getElementById('starfield');
         const totalStars = 120;
 
@@ -382,38 +554,51 @@
             starfield.appendChild(star);
         }
 
-        // --- ENLAZAR LAS IMÁGENES DE TU JUEGO CON LOS NOMBRES EN MINÚSCULAS ---
-        const snoopyImg = new Image();
-        snoopyImg.src = "snoopy.png";
+        // --- 2. PRECARGA DE IMÁGENES Y MULTIMEDIA ---
+        const snoopyImg = new Image(); snoopyImg.src = "snoopy.png";
+        const casitaImg = new Image(); casitaImg.src = "casita.png";
+        const snoopyparadoImg = new Image(); snoopyparadoImg.src = "snoopyparado.png";
+        const carlitosImg = new Image(); carlitosImg.src = "carlitos.png";
+        const lucyImg = new Image(); lucyImg.src = "lucy.png";
+        const snoopydulcesImg = new Image(); snoopydulcesImg.src = "snoopydulces.png"
+        const screamerImgObj = new Image(); screamerImgObj.src = "Alexamomo.png";
 
-        const casitaImg = new Image(); 
-        casitaImg.src = "casita.png";
+        // Imágenes PNG añadidas para Atrapa las Calabazas
+        const calabazaImg = new Image(); calabazaImg.src = "calabaza.png";
+        const dulceImg = new Image(); dulceImg.src = "dulce.png";
+        const fantasmaImg = new Image(); fantasmaImg.src = "fantasma.png";
 
-        const snoopyparadoImg = new Image(); 
-        snoopyparadoImg.src = "snoopyparado.png";
+        const gritoAudio = new Audio("grito.mp3");
 
-        const carlitosImg = new Image(); 
-        carlitosImg.src = "carlitos.png";
-
-        const lucyImg = new Image(); 
-        lucyImg.src = "lucy.png";
-
-        // --- CONTROLADORES DE MODALES Y LANZADORES ---
+        // --- 3. ELEMENTOS DE CONTROL DEL MENÚ PRINCIPAL ---
         const launcherPlane = document.getElementById('game-launcher-plane');
         const launcherSearch = document.getElementById('game-launcher-search');
+        const launcherCatch = document.getElementById('game-launcher-catch');
+        const launcherMaze = document.getElementById('game-launcher-maze');
+        
         const overlayPlane = document.getElementById('plane-overlay');
         const overlaySearch = document.getElementById('search-overlay');
+        const overlayCatch = document.getElementById('catch-overlay');
+        const overlayMaze = document.getElementById('maze-overlay');
+        const overlayScreamer = document.getElementById('screamer-overlay');
+        
         const closePlaneBtn = document.getElementById('close-plane-btn');
         const closeSearchBtn = document.getElementById('close-search-btn');
+        const closeCatchBtn = document.getElementById('close-catch-btn');
+        const closeMazeBtn = document.getElementById('close-maze-btn');
+        
         const arcadeDesc = document.getElementById('arcade-description');
+        const halloweenContainer = document.getElementById('halloween-launcher-container');
 
         function toggleLaunchers(show) {
             const displayStyle = show ? 'flex' : 'none';
             launcherPlane.style.display = displayStyle;
             launcherSearch.style.display = displayStyle;
+            halloweenContainer.style.display = displayStyle;
             arcadeDesc.style.display = show ? 'block' : 'none';
         }
 
+        // --- 4. ENLACE SEGURO DE EVENTOS DE APERTURA Y CIERRE ---
         launcherPlane.addEventListener('click', () => {
             overlayPlane.classList.add('active');
             toggleLaunchers(false);
@@ -440,8 +625,31 @@
             clearInterval(searchTimerInterval);
         });
 
+        launcherCatch.addEventListener('click', () => {
+            overlayCatch.classList.add('active');
+            toggleLaunchers(false);
+            initCatchGameLayout();
+        });
+
+        closeCatchBtn.addEventListener('click', () => {
+            overlayCatch.classList.remove('active');
+            toggleLaunchers(true);
+            catchGameActive = false;
+        });
+
+        launcherMaze.addEventListener('click', () => {
+            overlayMaze.classList.add('active');
+            toggleLaunchers(false);
+            initMazeGame();
+        });
+
+        closeMazeBtn.addEventListener('click', () => {
+            overlayMaze.classList.remove('active');
+            toggleLaunchers(true);
+            mazeActive = false;
+        });
         // ===================================================
-        // MOTOR DEL JUEGO: SNOOPY AVIÓN
+        // MOTOR DEL JUEGO: SNOOPY AVIÓN (PARTE 1)
         // ===================================================
         const planeCanvas = document.getElementById("planeCanvas");
         const ctxPlane = planeCanvas.getContext("2d");
@@ -459,6 +667,7 @@
             { x: 260, y: 240, w: 190, h: 10, speed: 0.2  }, 
             { x: 50,  y: 290, w: 250, h: 12, speed: 0.12 }
         ];
+        
         const planeSnoopy = {
             x: 60, y: 240, width: 75, height: 85,         
             gravity: 0.35, thrust: 0.45, velocity: 0, maxSpeed: 6,        
@@ -496,7 +705,9 @@
             ctxPlane.fillRect(cx + ch * 2, cy + ch - 2, cw - ch * 4, 1.5);
             ctxPlane.restore();
         }
-
+        // ===================================================
+        // MOTOR DEL JUEGO: SNOOPY AVIÓN (PARTE 2)
+        // ===================================================
         const planePipes = [];
         const pipeWidth = 72; const pipeGap = 185; const pipeSpeed = 2.5;
         let pipeTimer = 0;
@@ -507,6 +718,7 @@
             const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
             planePipes.push({ x: planeCanvas.width, top: topHeight, bottom: planeCanvas.height - (topHeight + pipeGap), passed: false });
         }
+        
         function drawMarioPipe(x, y, height, isTop) {
             ctxPlane.save();
             const baseGreen = "#39b525"; const darkGreen = "#109418"; const lightGreen = "#5ce73d"; const strokeColor = "#1a1a1a"; 
@@ -556,6 +768,7 @@
         planeCanvas.addEventListener("mouseup", stopPlaneAction);
         planeCanvas.addEventListener("touchstart", (e) => { startPlaneAction(); e.preventDefault(); });
         planeCanvas.addEventListener("touchend", stopPlaneAction);
+        
         function resetPlaneGame() {
             planeSnoopy.y = 240; planeSnoopy.velocity = 0; planePipes.length = 0;
             planeScore = 0; scoreBoardPlane.innerText = planeScore; pipeTimer = 0;
@@ -617,8 +830,6 @@
             }
             requestAnimationFrame(updatePlaneGame);
         }
-        updatePlaneGame();
-
         // ===================================================
         // MOTOR DEL JUEGO: ¿DÓNDE ESTÁ SNOOPY? (ESTILO WALLY)
         // ===================================================
@@ -644,7 +855,6 @@
         let searchCharacters = []; 
         let searchTargetSnoopy = null;
 
-        // Variables de dimensiones para los personajes
         const targetWidth = 60; 
         const targetHeight = 70;
         const impostorWidth = 85; 
@@ -686,13 +896,13 @@
                     } else if (this.type === 2) { 
                         ctxSearch.drawImage(snoopyparadoImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     } else {
-                        // AQUÍ ENTRA TU NUEVA IMAGEN DE LUCY EN LUGAR DEL ÚLTIMO RECTÁNGULO ABSTRACTO
                         ctxSearch.drawImage(lucyImg, -this.w / 2, -this.h / 2, this.w, this.h); 
                     }
                     ctxSearch.restore();
                 }
             }
         }
+        
         function resizeSearchCanvas() { 
             searchCanvas.width = window.innerWidth; 
             searchCanvas.height = window.innerHeight; 
@@ -736,18 +946,15 @@
 
             if (clickX >= searchTargetSnoopy.x && clickX <= searchTargetSnoopy.x + searchTargetSnoopy.w && 
                 clickY >= searchTargetSnoopy.y && clickY <= searchTargetSnoopy.y + searchTargetSnoopy.h) {
-                // ¡Acertaste al Snoopy Real! Avanza de nivel
                 searchLevel++; 
                 searchScore += 100 + (searchTimeLeft * 2); 
                 searchTimeLeft += 15; 
                 if (searchTimeLeft > 60) searchTimeLeft = 60;
-                
                 searchLevelDisplay.innerText = searchLevel; 
                 searchScoreDisplay.innerText = searchScore; 
                 searchTimerDisplay.innerText = searchTimeLeft + "s"; 
                 generateSearchCrowd();
             } else {
-                // Penalización por hacer clic en el lugar incorrecto
                 searchTimeLeft -= 4; 
                 if (searchTimeLeft < 0) searchTimeLeft = 0; 
                 searchTimerDisplay.innerText = searchTimeLeft + "s"; 
@@ -791,6 +998,291 @@
 
         startSearchBtn.addEventListener("click", startSearchGame); 
         restartSearchBtn.addEventListener("click", startSearchGame);
+        // ===================================================
+        // MOTOR DEL JUEGO: SNOOPY CATCH (ATRAPA LA CALABAZA)
+        // ===================================================
+        const catchCanvas = document.getElementById("catchCanvas");
+        const ctxCatch = catchCanvas.getContext("2d");
+
+        const catchLivesDisplay = document.getElementById("catch-lives-display").querySelector("span");
+        const catchScoreDisplay = document.getElementById("catch-score-display").querySelector("span");
+        const catchStartScreen = document.getElementById("catch-start-screen");
+        const catchGoScreen = document.getElementById("catch-go-screen");
+        const catchGoMsg = document.getElementById("catch-go-msg");
+
+        let catchScore = 0;
+        let catchLives = 3;
+        let catchGameActive = false;
+        let catchItems = [];
+        let catchSpawnTimer = 0;
+
+        const playerCatch = { x: 250, y: 0, w: 75, h: 85 };
+
+        function resizeCatchCanvas() {
+            catchCanvas.width = catchCanvas.parentElement.clientWidth;
+            catchCanvas.height = catchCanvas.parentElement.clientHeight - 70;
+            playerCatch.y = catchCanvas.height - playerCatch.h - 10;
+        }
+
+        catchCanvas.addEventListener("mousemove", (e) => {
+            if (!catchGameActive) return;
+            const rect = catchCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            playerCatch.x = mouseX - playerCatch.w / 2;
+            if (playerCatch.x < 0) playerCatch.x = 0;
+            if (playerCatch.x + playerCatch.w > catchCanvas.width) playerCatch.x = catchCanvas.width - playerCatch.w;
+        });
+
+        function spawnCatchItem() {
+            let rand = Math.random();
+            let type = rand < 0.5 ? 'calabaza' : (rand < 0.8 ? 'dulce' : 'fantasma');
+            
+            catchItems.push({
+                x: Math.random() * (catchCanvas.width - 35),
+                y: -40,
+                w: 35,
+                h: 35,
+                type: type,
+                speed: Math.random() * 2 + 2 + (catchScore * 0.002)
+            });
+        }
+
+        function updateCatchGame() {
+            if (!catchGameActive) return;
+            ctxCatch.clearRect(0, 0, catchCanvas.width, catchCanvas.height);
+
+            // Dibujar a Snoopy con su saquito
+            ctxCatch.drawImage(snoopydulcesImg, playerCatch.x, playerCatch.y, playerCatch.w, playerCatch.h);
+
+            catchSpawnTimer++;
+            if (catchSpawnTimer % Math.max(30, 70 - Math.floor(catchScore / 200)) === 0) {
+                spawnCatchItem();
+            }
+
+            for (let i = catchItems.length - 1; i >= 0; i--) {
+                let item = catchItems[i];
+                item.y += item.speed;
+
+                // Renderiza las imágenes PNG reales que agregaste
+                if (item.type === 'calabaza') {
+                    ctxCatch.drawImage(calabazaImg, item.x, item.y, item.w, item.h);
+                } else if (item.type === 'dulce') {
+                    ctxCatch.drawImage(dulceImg, item.x, item.y, item.w, item.h);
+                } else {
+                    ctxCatch.drawImage(fantasmaImg, item.x, item.y, item.w, item.h);
+                }
+
+                // Detectar Colisiones con Snoopy
+                if (item.x < playerCatch.x + playerCatch.w && item.x + item.w > playerCatch.x &&
+                    item.y < playerCatch.y + playerCatch.h && item.y + item.h > playerCatch.y) {
+                    
+                    if (item.type === 'calabaza') catchScore += 100;
+                    else if (item.type === 'dulce') catchScore += 50;
+                    else {
+                        catchLives--;
+                        catchLivesDisplay.innerText = catchLives;
+                        if (catchLives <= 0) endCatchGame();
+                    }
+                    catchScoreDisplay.innerText = catchScore;
+                    catchItems.splice(i, 1);
+                    continue;
+                }
+
+                if (item.y > catchCanvas.height) {
+                    if (item.type === 'calabaza') catchScore = Math.max(0, catchScore - 20);
+                    catchScoreDisplay.innerText = catchScore;
+                    catchItems.splice(i, 1);
+                }
+            }
+
+            if (catchGameActive) {
+                requestAnimationFrame(updateCatchGame);
+            }
+        }
+
+        function initCatchGameLayout() {
+            catchGameActive = false;
+            catchStartScreen.classList.remove("hidden");
+            catchGoScreen.classList.add("hidden");
+            resizeCatchCanvas();
+            ctxCatch.clearRect(0, 0, catchCanvas.width, catchCanvas.height);
+        }
+
+        function startCatchGame() {
+            catchScore = 0;
+            catchLives = 3;
+            catchItems = [];
+            catchSpawnTimer = 0;
+            catchGameActive = true;
+            catchLivesDisplay.innerText = catchLives;
+            catchScoreDisplay.innerText = catchScore;
+            catchStartScreen.classList.add("hidden");
+            catchGoScreen.classList.add("hidden");
+            resizeCatchCanvas();
+            updateCatchGame();
+        }
+
+        function endCatchGame() {
+            catchGameActive = false;
+            
+            // Reutiliza el disparador del screamer supremo y su audio de grito
+            overlayScreamer.classList.add("jumpscare");
+            gritoAudio.volume = 1.0;
+            gritoAudio.play().catch(err => console.log("Audio bloqueado por el navegador:", err));
+
+            // Después de 4 segundos de susto, quita el screamer y muestra su pantalla de perder por nuv
+            setTimeout(() => {
+                overlayScreamer.classList.remove("jumpscare");
+                catchGoScreen.classList.remove("hidden");
+                catchGoMsg.innerText = `pinche bot perdio Conseguiste ${catchScore} puntos.`;
+            }, 4000);
+        }
+
+        document.getElementById("start-catch-btn").addEventListener("click", startCatchGame);
+        document.getElementById("restart-catch-btn").addEventListener("click", startCatchGame);
+        // ===================================================
+        // MOTOR DEL JUEGO: LABERINTO DEL TERROR (HALLOWEEN)
+        // ===================================================
+        const mazeCanvas = document.getElementById("mazeCanvas");
+        const ctxMaze = mazeCanvas.getContext("2d");
+        const mazeLevelTxt = document.getElementById("maze-level-txt");
+
+        let mazeLevel = 1;
+        let mazeActive = false;
+
+        const playerPos = { x: 30, y: 40, radius: 8 };
+        const goalPos = { x: 550, y: 450, w: 30, h: 30 };
+
+        // Definición matemática de paredes rectangulares por nivel (Dificultad escalada)
+        const mazeWalls = {
+            1: [{x: 0, y: 100, w: 450, h: 40}, {x: 150, y: 250, w: 450, h: 40}, {x: 0, y: 380, w: 450, h: 40}],
+            2: [{x: 100, y: 0, w: 40, h: 380}, {x: 240, y: 120, w: 40, h: 380}, {x: 380, y: 0, w: 40, h: 380}, {x: 480, y: 120, w: 40, h: 380}],
+            3: [{x: 0, y: 80, w: 500, h: 30}, {x: 100, y: 180, w: 500, h: 30}, {x: 0, y: 280, w: 500, h: 30}, {x: 100, y: 380, w: 500, h: 30}],
+            4: [{x: 80, y: 0, w: 30, h: 420}, {x: 190, y: 80, w: 30, h: 420}, {x: 300, y: 0, w: 30, h: 420}, {x: 410, y: 80, w: 30, h: 420}, {x: 510, y: 0, w: 30, h: 380}],
+            5: [{x: 0, y: 70, w: 530, h: 25}, {x: 70, y: 150, w: 530, h: 25}, {x: 0, y: 230, w: 530, h: 25}, {x: 70, y: 310, w: 530, h: 25}, {x: 0, y: 390, w: 530, h: 25}],
+            6: [{x: 0, y: 0, w: 600, h: 15}, {x: 0, y: 485, w: 600, h: 15}, {x: 80, y: 15, w: 30, h: 400}, {x: 190, y: 80, w: 30, h: 405}, {x: 300, y: 15, w: 30, h: 400}, {x: 410, y: 80, w: 30, h: 405}, {x: 500, y: 15, w: 30, h: 430}],
+            7: [
+                {x: 0, y: 60, w: 540, h: 20},
+                {x: 60, y: 140, w: 540, h: 20},
+                {x: 0, y: 220, w: 540, h: 20},
+                {x: 60, y: 300, w: 540, h: 20},
+                {x: 0, y: 380, w: 540, h: 20},
+                {x: 60, y: 440, w: 540, h: 20}
+            ]
+        };
+
+        function initMazeGame() {
+            mazeLevel = 1;
+            mazeActive = true;
+            resetMazePlayer();
+            drawMaze();
+        }
+
+        function resetMazePlayer() {
+            mazeLevelTxt.innerText = mazeLevel;
+            if (mazeLevel === 2 || mazeLevel === 4 || mazeLevel === 6) {
+                playerPos.x = 30; playerPos.y = 30;
+                goalPos.x = 540; goalPos.y = 440;
+            } else if (mazeLevel === 7) {
+                playerPos.x = 20; playerPos.y = 30;
+                goalPos.x = 550; goalPos.y = 450; 
+            } else {
+                playerPos.x = 30; playerPos.y = 40;
+                goalPos.x = 550; goalPos.y = 440;
+            }
+        }
+
+        function drawMaze() {
+            if (!mazeActive) return;
+            ctxMaze.clearRect(0, 0, mazeCanvas.width, mazeCanvas.height);
+
+            // Dibujar Meta (Rojo)
+            ctxMaze.fillStyle = "#FF3366";
+            ctxMaze.fillRect(goalPos.x, goalPos.y, goalPos.w, goalPos.h);
+            ctxMaze.lineWidth = 2; ctxMaze.strokeStyle = "#FFFFFF";
+            ctxMaze.strokeRect(goalPos.x, goalPos.y, goalPos.w, goalPos.h);
+
+            // Dibujar Paredes del nivel actual (Morado Brillante)
+            ctxMaze.fillStyle = "#9C27B0";
+            ctxMaze.shadowBlur = 10; ctxMaze.shadowColor = "#9C27B0";
+            const walls = mazeWalls[mazeLevel] || [];
+            walls.forEach(w => { ctxMaze.fillRect(w.x, w.y, w.w, w.h); });
+
+            ctxMaze.shadowBlur = 0;
+
+            // Dibujar Jugador (Verde Radiactivo)
+            ctxMaze.fillStyle = "#00FF66";
+            ctxMaze.beginPath();
+            ctxMaze.arc(playerPos.x, playerPos.y, playerPos.radius, 0, Math.PI * 2);
+            ctxMaze.fill();
+
+            requestAnimationFrame(drawMaze);
+        }
+
+        // CONTROL POR SEGUIMIENTO DEL PUNTERO
+        mazeCanvas.addEventListener("mousemove", (e) => {
+            if (!mazeActive) return;
+            const rect = mazeCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const dist = Math.hypot(mouseX - playerPos.x, mouseY - playerPos.y);
+            if (dist < 30) {
+                playerPos.x = mouseX;
+                playerPos.y = mouseY;
+                checkMazeCollisions();
+            }
+        });
+
+        function checkMazeCollisions() {
+            if (playerPos.x - playerPos.radius <= 0 || playerPos.x + playerPos.radius >= mazeCanvas.width ||
+                playerPos.y - playerPos.radius <= 0 || playerPos.y + playerPos.radius >= mazeCanvas.height) {
+                resetMazePlayer();
+                return;
+            }
+
+            const walls = mazeWalls[mazeLevel] || [];
+            for (let i = 0; i < walls.length; i++) {
+                const w = walls[i];
+                const closestX = Math.max(w.x, Math.min(playerPos.x, w.x + w.w));
+                const closestY = Math.max(w.y, Math.min(playerPos.y, w.y + w.h));
+                const distance = Math.hypot(playerPos.x - closestX, playerPos.y - closestY);
+
+                if (distance < playerPos.radius) {
+                    resetMazePlayer(); 
+                    return;
+                }
+            }
+
+            if (playerPos.x >= goalPos.x && playerPos.x <= goalPos.x + goalPos.w &&
+                playerPos.y >= goalPos.y && playerPos.y <= goalPos.y + goalPos.h) {
+                if (mazeLevel < 7) {
+                    mazeLevel++;
+                    resetMazePlayer();
+                }
+            }
+
+            // ACTIVADOR DEL SCREAMER INVISIBLE (ZONA DE TRASPASO NIVEL 7)
+            if (mazeLevel === 7 && playerPos.x > 490 && playerPos.y > 400) {
+                triggerJumpscare();
+            }
+        }
+
+        function triggerJumpscare() {
+            mazeActive = false; 
+            overlayScreamer.classList.add("jumpscare");
+            gritoAudio.volume = 1.0;
+            gritoAudio.play().catch(err => console.log("Audio bloqueado temporalmente por el navegador:", err));
+
+            setTimeout(() => {
+                overlayScreamer.classList.remove("jumpscare");
+                overlayMaze.classList.remove('active');
+                toggleLaunchers(true);
+            }, 4000);
+        }
+
+        // --- ENTRADA SEGURA DE BUCLE: Inicia las nubes y animaciones del avión con todas las variables cargadas ---
+        updatePlaneGame();
     </script>
 </body>
 </html>
